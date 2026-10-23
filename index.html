@@ -142,8 +142,18 @@ a{color:var(--c-gold)}
 .glance-head{display:flex; justify-content:space-between; align-items:end; gap:24px; flex-wrap:wrap; margin-bottom:24px; position:sticky; top:0; z-index:2; background:var(--c-bg-2); padding:18px 0 14px}
 .glance h2{font-size:clamp(2rem,4.6vw,3.6rem)}
 .glance-gen{font-family:"Fraunces",serif; font-style:italic; color:var(--c-gold); font-size:clamp(1.1rem,2vw,1.5rem)}
-.glance-scroll{overflow-x:auto; overflow-y:hidden; -webkit-overflow-scrolling:touch; padding-bottom:8px}
-#glance-svg{display:block; width:100%; height:auto}
+.glance-scroll{overflow-x:auto; overflow-y:hidden; -webkit-overflow-scrolling:touch; padding-bottom:10px; cursor:grab; border-radius:var(--radius); background:radial-gradient(120% 60% at 50% 0%, rgba(227,169,75,.06), transparent 70%)}
+.glance-scroll.dragging{cursor:grabbing; user-select:none}
+#glance-svg{display:block; height:auto; max-width:none}
+.glance-tools{display:flex; align-items:center; gap:18px}
+.zoom{display:flex; border:1px solid var(--c-card-edge); border-radius:999px; overflow:hidden}
+.zoom button{background:none; border:0; color:var(--c-ink); min-width:40px; height:36px; cursor:pointer; font-size:1rem}
+.zoom button + button{border-left:1px solid var(--c-card-edge)}
+.zoom button:hover:not(:disabled){color:var(--c-gold)}
+.zoom button:disabled{opacity:.35; cursor:default}
+#glance-svg .g-sp{fill:var(--c-ink-dim); stroke:var(--c-bg-2); font:italic 400 11.5px "Fraunces",serif}
+#glance-svg .g-node.item text{font-size:12.5px}
+#glance-svg .g-node.wed circle{stroke:var(--c-vermilion)}
 #glance-svg .g-link{fill:none; stroke:var(--c-branch); stroke-width:1.4; opacity:.75}
 #glance-svg .g-node circle{fill:var(--c-bg-2); stroke:var(--c-gold); stroke-width:2}
 #glance-svg .g-node.root circle{fill:var(--c-gold)}
@@ -153,7 +163,7 @@ a{color:var(--c-gold)}
 #glance-svg .g-node:hover circle{fill:var(--c-gold)}
 #glance-svg .g-node:hover text{fill:var(--c-gold)}
 .phone-only{display:none}
-@media (max-width: 860px){ .phone-only{display:inline} }
+@media (max-width: 860px){ .phone-only{display:inline} .desk-only{display:none} }
 .glance .hint{color:var(--c-ink-dim); font-size:.9rem; margin-top:14px}
 
 /* ---------------- Explorer ---------------- */
@@ -283,7 +293,6 @@ footer .gu{font-family:"Noto Serif Gujarati",serif; color:var(--c-gold)}
   .intro-grid{grid-template-columns:1fr}
   .stats{grid-template-columns:1fr 1fr 1fr}
   .stats div{padding:20px 14px}
-  #glance-svg{width:1100px; height:auto; min-height:0}
   /* phones: one column hanging off a vertical trunk */
   .kids, .kids.many{grid-template-columns:1fr; gap:12px; margin-top:56px; padding-left:38px; max-width:none}
   .kid{flex-direction:row; text-align:left; align-items:center; gap:14px; padding:14px 16px}
@@ -359,12 +368,19 @@ footer .gu{font-family:"Noto Serif Gujarati",serif; color:var(--c-gold)}
         <p class="eyebrow">At a glance</p>
         <h2 id="glance-h">The whole vansh, <em>root to leaf</em></h2>
       </div>
-      <p class="glance-gen" aria-hidden="true">Generation <span id="glance-gen-n">VII</span></p>
+      <div class="glance-tools">
+        <p class="glance-gen" aria-hidden="true">Generation <span id="glance-gen-n">VII</span></p>
+        <div class="zoom" role="group" aria-label="Zoom the tree">
+          <button type="button" id="zoom-out" aria-label="Zoom out">−</button>
+          <button type="button" id="zoom-fit">Fit</button>
+          <button type="button" id="zoom-in" aria-label="Zoom in">+</button>
+        </div>
+      </div>
     </div>
     <div class="glance-scroll" data-lenis-prevent-wheel>
       <svg id="glance-svg" aria-hidden="true" preserveAspectRatio="xMidYMid meet"></svg>
     </div>
-    <p class="hint"><span class="phone-only">Swipe sideways to see the whole tree. </span>Tap any name to open their branch. Every name is also listed at the bottom of the page.</p>
+    <p class="hint"><span class="phone-only">Swipe sideways to see the whole tree. </span><span class="desk-only">Drag sideways or use the zoom buttons to see the whole tree. </span>Click any name to open their branch. Every name is also listed at the bottom of the page.</p>
   </div>
 </section>
 
@@ -777,18 +793,95 @@ if (HAS_GSAP){
    GLANCE — the whole tree, drawn generation by generation as you scroll
    ===================================================================== */
 (function glance(){
-  const svg = $("#glance-svg"), NS = "http://www.w3.org/2000/svg";
-  const COL = 178, ROW = 30, PADX = 24, PADY = 24, LABEL = 120;
-  let leaf = 0;
-  const pos = new Map();
-  (function place(p){
-    let y;
-    if (!p.children.length) y = PADY + (leaf++) * ROW;
-    else { const ys = p.children.map(place); y = (ys[0] + ys[ys.length - 1]) / 2; }
-    pos.set(p.id, { x: PADX + p.gen * COL, y });
-    return y;
-  })(FAMILY);
-  const W = PADX + (byGen.length - 1) * COL + LABEL, H = PADY * 2 + (leaf - 1) * ROW;
+  /* Top-down tree: Govindji at the top, one row per generation.
+     Brothers and sisters with no children of their own are stacked in a short
+     list under their parent, which keeps the tree narrow enough to read. */
+  const svg = $("#glance-svg"), box = $(".glance-scroll"), NS = "http://www.w3.org/2000/svg";
+  const ROWH = 128, PAD = 40, STACK = 26, TOP = 34, GAP = 26, TICK = 17;
+  const rowY = g => TOP + g * ROWH;
+  const nodes = [];   // {p, x, y, kind:"node"|"item"}
+  const links = byGen.map(() => []);   // connector paths, grouped by the generation they lead to
+
+  // measure real label widths so neighbouring names never collide
+  const mctx = document.createElement("canvas").getContext("2d");
+  const textW = (t, font) => { mctx.font = font; return mctx.measureText(t).width; };
+  const nameW = p => Math.max(textW(p.name, '500 13px Manrope, sans-serif'),
+                              p.spouse ? textW("& " + p.spouse, 'italic 400 11.5px Fraunces, serif') : 0);
+  const itemW = p => textW(p.name, '500 12.5px Manrope, sans-serif');
+
+  const isLeaf = p => !p.children.length;
+  function columns(p){
+    // consecutive childless siblings become one stacked column
+    const cols = []; let run = [];
+    const flush = () => { if (run.length === 1) cols.push({ type: "node", p: run[0] }); else if (run.length) cols.push({ type: "stack", items: run }); run = []; };
+    p.children.forEach(c => { if (isLeaf(c)) run.push(c); else { flush(); cols.push({ type: "node", p: c }); } });
+    flush();
+    return cols;
+  }
+  const stackW = (items, padL) => padL + TICK + Math.max(...items.map(itemW)) + 4;
+
+  // pass 1: sizes. Each box gets a width (w) and the x of its own node inside it (x).
+  const M = new Map();
+  function measure(p){
+    const nw = nameW(p);
+    if (isLeaf(p)){ const w = Math.max(36, nw); const m = { w, x: w / 2 }; M.set(p, m); return m; }
+    const cols = columns(p);
+    if (cols.length === 1 && cols[0].type === "stack"){
+      // children hang straight down from the parent as a list
+      const padL = Math.max(12, nw / 2 + 4);
+      const m = { w: Math.max(stackW(cols[0].items, padL), padL + nw / 2), x: padL, cols, single: true };
+      M.set(p, m); return m;
+    }
+    let cur = 0;
+    cols.forEach(c => {
+      if (c.type === "stack"){ c.padL = 12; c.w = stackW(c.items, 12); c.ax = 12; }
+      else { const cm = measure(c.p); c.w = cm.w; c.ax = cm.x; }
+      c.left = cur; cur += c.w + GAP;
+    });
+    const childrenW = cur - GAP;
+    let x = (cols[0].left + cols[0].ax + cols[cols.length - 1].left + cols[cols.length - 1].ax) / 2;
+    const shift = Math.max(0, nw / 2 - x);
+    x += shift;
+    const m = { w: Math.max(childrenW + shift, x + nw / 2), x, cols, shift };
+    M.set(p, m); return m;
+  }
+
+  // pass 2: positions and connectors
+  function drawStack(items, gen, sx){
+    const y0 = rowY(gen);
+    let d = `M${sx} ${y0 - 14} V${y0 + (items.length - 1) * STACK}`;
+    items.forEach((c, i) => {
+      const y = y0 + i * STACK;
+      d += ` M${sx} ${y} H${sx + 12}`;
+      nodes.push({ p: c, x: sx + TICK, y, kind: "item" });
+    });
+    links[gen].push(d);
+  }
+  function place(p, left){
+    const m = M.get(p), x = left + m.x, y = rowY(p.gen);
+    nodes.push({ p, x, y, kind: "node" });
+    if (isLeaf(p)) return;
+    const y0 = y + (p.gen === 0 ? 10 : 7) + (p.spouse ? 42 : 26);   // start below the name and spouse
+    const cy = rowY(p.gen + 1), midY = y0 + (cy - 14 - y0) * .5;
+    if (m.single){
+      links[p.gen + 1].push(`M${x} ${y0} V${cy - 14}`);
+      drawStack(m.cols[0].items, p.gen + 1, x);
+      return;
+    }
+    m.cols.forEach(c => {
+      const cl = left + m.shift + c.left, ax = cl + c.ax;
+      if (c.type === "stack") drawStack(c.items, p.gen + 1, ax);
+      else place(c.p, cl);
+      const r = Math.min(10, Math.abs(ax - x) / 2), dir = ax > x ? 1 : -1;
+      links[p.gen + 1].push(Math.abs(ax - x) < 1
+        ? `M${x} ${y0} V${cy - 14}`
+        : `M${x} ${y0} V${midY - r} Q${x} ${midY},${x + dir * r} ${midY} H${ax - dir * r} Q${ax} ${midY},${ax} ${midY + r} V${cy - 14}`);
+    });
+  }
+  const total = measure(FAMILY);
+  place(FAMILY, PAD);
+  const W = PAD * 2 + total.w;
+  const H = nodes.reduce((m, n) => Math.max(m, n.y), 0) + 60;
   svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
   svg.style.aspectRatio = `${W} / ${H}`;
 
@@ -796,24 +889,68 @@ if (HAS_GSAP){
   const nodeGroups = byGen.map(() => document.createElementNS(NS, "g"));
   linkGroups.forEach(g => svg.appendChild(g));
   nodeGroups.forEach(g => svg.appendChild(g));
-
-  people.forEach(p => {
-    const a = pos.get(p.id);
-    if (p.parent){
-      const b = pos.get(p.parent.id), xm = (a.x + b.x) / 2;
-      const path = document.createElementNS(NS, "path");
-      path.setAttribute("d", `M${b.x} ${b.y} C${xm} ${b.y},${xm} ${a.y},${a.x} ${a.y}`);
-      path.setAttribute("class", "g-link");
-      linkGroups[p.gen].appendChild(path);
-    }
+  links.forEach((arr, g) => arr.forEach(d => {
+    const path = document.createElementNS(NS, "path");
+    path.setAttribute("d", d); path.setAttribute("class", "g-link");
+    linkGroups[g].appendChild(path);
+  }));
+  nodes.forEach(({ p, x, y, kind }) => {
     const g = document.createElementNS(NS, "g");
-    g.setAttribute("class", "g-node" + (p.gen === 0 ? " root" : "") + (p.unknown ? " unknown" : ""));
+    g.setAttribute("class", "g-node " + kind + (p.gen === 0 ? " root" : "") + (p.unknown ? " unknown" : "") + (p.spouse ? " wed" : ""));
     g.dataset.id = p.id;
-    g.innerHTML = `<circle cx="${a.x}" cy="${a.y}" r="${p.gen === 0 ? 8 : 6}"/><text x="${a.x + 12}" y="${a.y + 4.5}">${escapeHTML(p.name)}</text>`;
+    const label = escapeHTML(p.name);
+    if (kind === "item"){
+      g.innerHTML = `<circle cx="${x}" cy="${y}" r="4.5"/><text x="${x + 10}" y="${y + 4.5}">${label}</text>`;
+    } else {
+      const r = p.gen === 0 ? 10 : 7;
+      g.innerHTML = `<circle cx="${x}" cy="${y}" r="${r}"/><text x="${x}" y="${y + r + 17}" text-anchor="middle">${label}</text>`
+        + (p.spouse ? `<text class="g-sp" x="${x}" y="${y + r + 33}" text-anchor="middle">&amp; ${escapeHTML(p.spouse)}</text>` : "");
+    }
     nodeGroups[p.gen].appendChild(g);
   });
 
+  /* ---- zoom + drag to move ---- */
+  let scale = 1;
+  const minScale = () => Math.min(1, box.clientWidth / W);
+  function setScale(s, keepCenter = true){
+    const cx = (box.scrollLeft + box.clientWidth / 2) / (W * scale);
+    scale = Math.max(minScale(), Math.min(1.6, s));
+    svg.style.width = (W * scale) + "px";
+    if (keepCenter) box.scrollLeft = cx * W * scale - box.clientWidth / 2;
+    $("#zoom-out").disabled = scale <= minScale() + .001;
+    $("#zoom-in").disabled = scale >= 1.6 - .001;
+    if (window.ScrollTrigger) ScrollTrigger.refresh();
+  }
+  function centerOn(id){
+    const n = nodes.find(n => n.p.id === id);
+    if (n) box.scrollLeft = n.x * scale - box.clientWidth / 2;
+  }
+  function initialView(){
+    // readable by default: about 0.8 on laptops, a bit smaller on phones
+    const s = PHONE.matches ? .72 : Math.max(minScale(), .82);
+    scale = s; setScale(s, false); centerOn(FAMILY.id);
+  }
+  $("#zoom-in").addEventListener("click", () => setScale(scale * 1.25));
+  $("#zoom-out").addEventListener("click", () => setScale(scale / 1.25));
+  $("#zoom-fit").addEventListener("click", () => { setScale(minScale(), false); box.scrollLeft = 0; });
+  initialView();
+  let resizeT; window.addEventListener("resize", () => { clearTimeout(resizeT); resizeT = setTimeout(() => setScale(scale), 150); });
+
+  let drag = null, moved = false;
+  box.addEventListener("pointerdown", e => {
+    if (e.pointerType !== "mouse" || e.button !== 0) return;
+    drag = { x: e.clientX, left: box.scrollLeft }; moved = false;
+  });
+  window.addEventListener("pointermove", e => {
+    if (!drag) return;
+    const dx = e.clientX - drag.x;
+    if (Math.abs(dx) > 4){ moved = true; box.classList.add("dragging"); }
+    box.scrollLeft = drag.left - dx;
+  });
+  window.addEventListener("pointerup", () => { drag = null; box.classList.remove("dragging"); });
+
   svg.addEventListener("click", e => {
+    if (moved){ moved = false; return; }
     const n = e.target.closest(".g-node");
     if (!n) return;
     go(n.dataset.id, { userInitiated: true });
@@ -822,33 +959,31 @@ if (HAS_GSAP){
 
   if (!HAS_GSAP || !window.ScrollTrigger) return;
   const label = $("#glance-gen-n");
-  const links = linkGroups.map(g => $$("path", g));
-  links.flat().forEach(p => { const L = p.getTotalLength(); p.dataset.len = L; });
+  const paths = linkGroups.map(g => $$("path", g));
+  paths.flat().forEach(p => { p.dataset.len = p.getTotalLength(); });
   const mm = gsap.matchMedia();
-  const build = (scrollTrigger) => {
-    links.flat().forEach(p => { p.style.strokeDasharray = p.dataset.len; p.style.strokeDashoffset = p.dataset.len; });
+  // the tree grows downward, one generation at a time, as it scrolls past
+  mm.add("(prefers-reduced-motion: no-preference)", () => {
+    paths.flat().forEach(p => { p.style.strokeDasharray = p.dataset.len; p.style.strokeDashoffset = p.dataset.len; });
     gsap.set(nodeGroups.slice(1), { opacity: 0 });
     label.textContent = "I";
-    const tl = gsap.timeline({ scrollTrigger, defaults: { ease: "none" } });
+    const tl = gsap.timeline({ defaults: { ease: "none" },
+      scrollTrigger: { trigger: "#glance-svg", start: "top 70%", end: "bottom 80%", scrub: .6 } });
     for (let g = 1; g < byGen.length; g++){
-      tl.to(links[g], { strokeDashoffset: 0, duration: 1, stagger: .02 })
-        .to(nodeGroups[g], { opacity: 1, duration: .4 }, "-=.35");
+      tl.to(paths[g], { strokeDashoffset: 0, duration: 1 })
+        .to(nodeGroups[g], { opacity: 1, duration: .4 }, "-=.3");
     }
-    // keep the label right when scrubbing backwards
     tl.eventCallback("onUpdate", () => {
-      const g = Math.min(byGen.length - 1, Math.floor(tl.progress() * (byGen.length - 1) + .15));
-      label.textContent = ROMAN[g];
+      label.textContent = ROMAN[Math.min(byGen.length - 1, Math.floor(tl.progress() * (byGen.length - 1) + .15))];
     });
     return () => {
-      links.flat().forEach(p => { p.style.strokeDasharray = ""; p.style.strokeDashoffset = ""; });
+      paths.flat().forEach(p => { p.style.strokeDasharray = ""; p.style.strokeDashoffset = ""; });
       gsap.set(nodeGroups, { clearProps: "opacity" });
       label.textContent = ROMAN[byGen.length - 1];
     };
-  };
-  // the tree grows generation by generation as it scrolls past
-  mm.add("(prefers-reduced-motion: no-preference)", () =>
-    build({ trigger: "#glance-svg", start: "top 75%", end: "bottom 85%", scrub: .6 }));
+  });
 })();
+
 
 /* =====================================================================
    EXPLORER — one person at a time, their children as branches
