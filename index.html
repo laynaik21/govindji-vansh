@@ -139,11 +139,11 @@ a{color:var(--c-gold)}
 
 /* ---------------- Glance (whole tree) ---------------- */
 .glance{background:var(--c-bg-2); padding:clamp(60px,8vw,90px) 0 40px; position:relative}
-.glance-head{display:flex; justify-content:space-between; align-items:end; gap:24px; flex-wrap:wrap; margin-bottom:24px}
+.glance-head{display:flex; justify-content:space-between; align-items:end; gap:24px; flex-wrap:wrap; margin-bottom:24px; position:sticky; top:0; z-index:2; background:var(--c-bg-2); padding:18px 0 14px}
 .glance h2{font-size:clamp(2rem,4.6vw,3.6rem)}
 .glance-gen{font-family:"Fraunces",serif; font-style:italic; color:var(--c-gold); font-size:clamp(1.1rem,2vw,1.5rem)}
 .glance-scroll{overflow-x:auto; overflow-y:hidden; -webkit-overflow-scrolling:touch; padding-bottom:8px}
-#glance-svg{display:block; width:100%; height:calc(100svh - 15rem); min-height:420px}
+#glance-svg{display:block; width:100%; height:auto}
 #glance-svg .g-link{fill:none; stroke:var(--c-branch); stroke-width:1.4; opacity:.75}
 #glance-svg .g-node circle{fill:var(--c-bg-2); stroke:var(--c-gold); stroke-width:2}
 #glance-svg .g-node.root circle{fill:var(--c-gold)}
@@ -216,6 +216,17 @@ a{color:var(--c-gold)}
 .gen-label{font-size:.74rem; letter-spacing:.24em; text-transform:uppercase; color:var(--c-gold); font-weight:600}
 #focus-name:focus{outline:none}
 .focus h3{font-size:clamp(2.4rem,6vw,4.4rem); letter-spacing:-.02em; margin:.3rem 0 .2rem}
+.gu-name{font-family:"Noto Serif Gujarati",serif; color:var(--c-gold); font-size:1.15rem; margin:-.1rem 0 .35rem}
+.place{display:inline-flex; align-items:center; gap:6px; margin-top:.55rem; padding:.3em .85em; border-radius:999px; border:1px solid rgba(134,163,111,.45); color:var(--c-leaf); font-size:.82rem; font-weight:600; letter-spacing:.04em}
+.place svg{width:12px; height:12px; flex:none}
+.place [lang="gu"]{font-family:"Noto Serif Gujarati",serif; font-weight:400; color:var(--c-ink-dim)}
+.kid-gu{font-family:"Noto Serif Gujarati",serif; font-size:.85rem; color:var(--c-gold); line-height:1.3}
+.kid-place{font-size:.72rem; color:var(--c-leaf); font-weight:600; display:inline-flex; gap:4px; align-items:center}
+.kid-place svg{width:10px; height:10px}
+.finder-msg button{background:none; border:1px solid var(--c-card-edge); color:var(--c-ink); border-radius:999px; padding:.25em .8em; margin:4px 6px 0 0; cursor:pointer; font-size:.8rem}
+.finder-msg button:hover{border-color:var(--c-gold); color:var(--c-gold)}
+.gens .dup{color:var(--c-ink-dim); font-size:.75rem}
+.gens .gu{font-family:"Noto Serif Gujarati",serif; color:var(--c-ink-dim); font-size:.8rem; margin-left:6px}
 .spouse-line{font-family:"Fraunces",serif; font-style:italic; font-size:1.15rem; color:var(--c-ink)}
 .spouse-line.empty{color:var(--c-ink-dim); font-size:1rem}
 .focus-meta{margin-top:.6rem; color:var(--c-ink-dim); font-size:.9rem}
@@ -413,70 +424,108 @@ footer .gu{font-family:"Noto Serif Gujarati",serif; color:var(--c-gold)}
 /* =====================================================================
    THE FAMILY
    ---------------------------------------------------------------------
-   To add a spouse:      { name: "Anilbhai", spouse: "Hansaben", ... }
-   To add a child:       add { name: "New Name" } inside "children".
-   unknown: true         = this branch's details are still being gathered.
+   name      English name (required)
+   gu        Gujarati name, shown under the English one
+   spouse    spouse's name
+   place     place shown on the card (placeGu = Gujarati spelling)
+   children  list of children, in order
+   unknown   true = this branch's details are still being gathered
    ===================================================================== */
 const FAMILY =
-{ name: "Govindji", spouse: null, children: [
-  { name: "Nagar ji", spouse: null, children: [
-    { name: "Durlabhbhai", spouse: null, children: [
-      { name: "Ranchodji", spouse: null, children: [
-        { name: "Rameshbhai", spouse: null, children: [
-          { name: "Kartik", spouse: null, children: [
-            { name: "Aaryan", spouse: null }
+{ name: "Govindji", children: [
+  { name: "Nagarji", children: [
+    { name: "Dullabhbhai", children: [
+      { name: "Ranchhodji", gu: "રણછોડજી", children: [
+        { name: "Rameshbhai", gu: "રમેશભાઈ", children: [
+          { name: "Kartik", gu: "કાર્તિક", children: [
+            { name: "Aaryan", gu: "આર્યન" }
           ]}
         ]}
       ]}
     ]},
-    { name: "Bhimbhai", spouse: null, children: [
-      { name: "Maganbhai", spouse: null, children: [
-        { name: "Ranjitbhai", spouse: null, children: [
-          { name: "Niraj", spouse: null, children: [
-            { name: "Durva", spouse: null }
+    { name: "Bhimbhai", gu: "ભીમભાઈ", children: [
+      { name: "Maganbhai", gu: "મગનભાઈ", children: [
+        { name: "Ranjeet", children: [
+          { name: "Niraj", gu: "નિરજ", children: [
+            { name: "Durva", gu: "દુર્વા" }
           ]}
         ]}
       ]},
-      { name: "Kamuben", spouse: null },
-      { name: "Chutobhai", spouse: null, children: [
-        { name: "Sureshbhai", spouse: null, children: [
-          { name: "Ankur", spouse: null, children: [ { name: "Isha", spouse: null } ]},
-          { name: "Jaymal", spouse: null, children: [ { name: "Hiyan", spouse: null } ]}
+      { name: "Kamuben", gu: "કમૂબેન" },
+      { name: "Khedubhai", gu: "ખેડુભાઈ", children: [
+        { name: "Sureshbhai", gu: "સુરેશભાઈ", children: [
+          { name: "Ankur", children: [ { name: "Isha" } ]},
+          { name: "Jaymal", children: [ { name: "Hiyan" } ]}
         ]},
-        { name: "Gitaben", spouse: null, children: [ { name: "Apurva", spouse: null } ]},
-        { name: "Ashokbhai", spouse: null, children: [
-          { name: "Smit", spouse: null },
-          { name: "Richi", spouse: null }
-        ]},
-        { name: "Bharatbhai", spouse: null, children: [ { name: "Chirag", spouse: null } ]},
-        { name: "Minakshiben", spouse: null, unknown: true }
+        { name: "Geetaben", gu: "ગીતાબેન", children: [ { name: "Apurva" } ]},
+        { name: "Bharatbhai", gu: "ભરતભાઈ", children: [ { name: "Chirag" } ]},
+        { name: "Minakshiben", gu: "મીનાક્ષી", unknown: true },
+        { name: "Ashokbhai", gu: "અશોકભાઈ", children: [
+          { name: "Smit" },
+          { name: "Richi" }
+        ]}
       ]}
     ]},
-    { name: "Dayalji", spouse: null, unknown: true },
-    { name: "Bhagwan ji", spouse: null, children: [
-      { name: "Anilbhai", spouse: null, children: [
-        { name: "Keyur", spouse: null, children: [ { name: "Lay", spouse: null } ]},
-        { name: "Uday", spouse: null, children: [
-          { name: "Jahan", spouse: null },
-          { name: "Hard", spouse: null }
-        ]},
-        { name: "Nipaben", spouse: null, children: [ { name: "Aatmi", spouse: null } ]}
+    { name: "Bhagwanji", gu: "ભગવાનજી", spouse: "Sharadaben", children: [
+      { name: "Mahendrabhai", gu: "મહેન્દ્ર", unknown: true },
+      { name: "Anilbhai", gu: "અનિલ", spouse: "Kumudben", children: [
+        { name: "Keyur", gu: "કેયૂર", spouse: "Purvi", children: [ { name: "Lay", gu: "લય" } ]},
+        { name: "Nipa", spouse: "Nileshbhai", children: [ { name: "Aatmi", gu: "આત્મી" } ]},
+        { name: "Uday", gu: "ઉદય", spouse: "Mitalben", children: [
+          { name: "Jahan" },
+          { name: "Hard" }
+        ]}
       ]},
-      { name: "Vinodbhai", spouse: null, children: [
-        { name: "Tejas", spouse: null, children: [
-          { name: "Dweep", spouse: null },
-          { name: "Ved", spouse: null }
+      { name: "Vinodbhai", spouse: "Shilaben", children: [
+        { name: "Tejas", children: [
+          { name: "Dweep" },
+          { name: "Ved" }
         ]},
-        { name: "Neha", spouse: null, children: [ { name: "Purv", spouse: null } ]}
+        { name: "Neha", children: [ { name: "Purv" } ]}
       ]},
-      { name: "Maherndrabhai", spouse: null, unknown: true },
-      { name: "Vasuben", spouse: null },
-      { name: "Harshaben", spouse: null }
+      { name: "Vasuben" },
+      { name: "Harshaben" }
     ]},
-    { name: "Manchaben", spouse: null },
-    { name: "Bhuliben", spouse: null },
-    { name: "Kashiben", spouse: null },
-    { name: "Gangaben", spouse: null }
+    { name: "Dayalji", unknown: true },
+    { name: "Manchhaben", gu: "મંછાબેન", place: "Amalsad", children: [
+      { name: "Bhimbhai", gu: "ભીમભાઈ", children: [
+        { name: "Babu", gu: "બાબુ" },
+        { name: "Suman", gu: "સુમન" },
+        { name: "Ravindra", gu: "રવિન્દ્ર" },
+        { name: "Jayesh", gu: "જયેશ" },
+        { name: "Niru", gu: "નીરુ" },
+        { name: "Manju", gu: "મંજુ" }
+      ]},
+      { name: "Maganbhai", gu: "મગનભાઈ", children: [
+        { name: "Somabhai", gu: "સોમાભાઈ" },
+        { name: "Jatin" },
+        { name: "Pushpa", gu: "પુષ્પા" },
+        { name: "Panna", gu: "પન્ના" },
+        { name: "Kumud", gu: "કુમુદ" }
+      ]},
+      { name: "Bhagubhai" },
+      { name: "Chhotubhai", gu: "છોટુભાઈ" },
+      { name: "Dhirubhai", gu: "ધીરુભાઈ" },
+      { name: "Ramanbhai", gu: "રમણભાઈ", children: [
+        { name: "Bhavinbhai" },
+        { name: "Bhargo", gu: "ભાર્ગો" },
+        { name: "Divya", gu: "દિવ્યા" }
+      ]}
+    ]},
+    { name: "Bhuliben", gu: "ભુલીબેન", place: "Vedchha", placeGu: "વેડછા", children: [
+      { name: "Bhanu", gu: "ભાનું", children: [
+        { name: "Jyoti", gu: "જ્યોતિ" },
+        { name: "Ila", gu: "ઈલા" }
+      ]},
+      { name: "Hansa", gu: "હંસા" },
+      { name: "Veeru", children: [
+        { name: "Kokila", gu: "કોકિલા" },
+        { name: "Hemant", gu: "હેમંત" },
+        { name: "Bharat", gu: "ભરત" }
+      ]}
+    ]},
+    { name: "Kashiben", gu: "કાશીબેન", place: "Sonawadi", placeGu: "સોનાવાડી" },
+    { name: "Gangaben", gu: "ગંગાબેન", place: "Sarbhan", placeGu: "સરભણ" }
   ]}
 ]};
 
@@ -517,6 +566,11 @@ const slug = s => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g
 })(FAMILY, null, 0);
 
 const initial = p => p.name.trim().charAt(0).toUpperCase();
+const PIN = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 11.5S1.8 7.3 1.8 4.6a4.2 4.2 0 1 1 8.4 0C10.2 7.3 6 11.5 6 11.5z" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="6" cy="4.6" r="1.4" fill="currentColor"/></svg>';
+const nameCount = new Map();
+people.forEach(p => nameCount.set(p.name.toLowerCase(), (nameCount.get(p.name.toLowerCase()) || 0) + 1));
+const isDup = p => nameCount.get(p.name.toLowerCase()) > 1;
+const whoIs = p => p.parent ? `child of ${p.parent.name}` : "the root";
 const lineage = p => { const a = []; for (let x = p; x; x = x.parent) a.unshift(x); return a; };
 const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
 function metaText(p){
@@ -736,6 +790,7 @@ if (HAS_GSAP){
   })(FAMILY);
   const W = PADX + (byGen.length - 1) * COL + LABEL, H = PADY * 2 + (leaf - 1) * ROW;
   svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  svg.style.aspectRatio = `${W} / ${H}`;
 
   const linkGroups = byGen.map(() => document.createElementNS(NS, "g"));
   const nodeGroups = byGen.map(() => document.createElementNS(NS, "g"));
@@ -790,10 +845,9 @@ if (HAS_GSAP){
       label.textContent = ROMAN[byGen.length - 1];
     };
   };
-  mm.add("(min-width: 861px) and (prefers-reduced-motion: no-preference)", () =>
-    build({ trigger: "#glance", start: "top top", end: "+=1800", scrub: .6, pin: true, anticipatePin: 1 }));
-  mm.add("(max-width: 860px) and (prefers-reduced-motion: no-preference)", () =>
-    build({ trigger: "#glance-svg", start: "top 80%", end: "bottom 60%", scrub: .5 }));
+  // the tree grows generation by generation as it scrolls past
+  mm.add("(prefers-reduced-motion: no-preference)", () =>
+    build({ trigger: "#glance-svg", start: "top 75%", end: "bottom 85%", scrub: .6 }));
 })();
 
 /* =====================================================================
@@ -805,9 +859,15 @@ const announce = $("#announce");
 let current = null;
 let busy = false;
 
+// links shared before some names were respelled keep working
+const OLD_IDS = { "nagar-ji":"nagarji", "bhagwan-ji":"bhagwanji", "durlabhbhai":"dullabhbhai", "ranchodji":"ranchhodji",
+  "ranjitbhai":"ranjeet", "chutobhai":"khedubhai", "gitaben":"geetaben", "maherndrabhai":"mahendrabhai",
+  "nipaben":"nipa", "manchaben":"manchhaben" };
 function personFromHash(){
   const m = location.hash.match(/^#\/([a-z0-9-]+)$/);
-  return m && people.has(m[1]) ? m[1] : null;
+  if (!m) return null;
+  const id = OLD_IDS[m[1]] || m[1];
+  return people.has(id) ? id : null;
 }
 
 function renderCrumbs(p){
@@ -841,6 +901,8 @@ function renderStage(p){
           <span class="kid-pair" aria-hidden="true"><span class="kid-ring">${escapeHTML(initial(k))}</span><span class="kid-partner${k.spouse ? "" : " empty"}"></span></span>
           <span class="kid-text">
             <span class="kid-name">${escapeHTML(k.name)}</span>
+            ${k.gu ? `<span class="kid-gu" lang="gu">${escapeHTML(k.gu)}</span>` : ""}
+            ${k.place ? `<span class="kid-place">${PIN}<span class="sr-only">Place: </span>${escapeHTML(k.place)}</span>` : ""}
             <span class="kid-spouse${k.spouse ? " has" : ""}">${k.spouse ? "&amp; " + escapeHTML(k.spouse) : "&amp; spouse to be added"}</span>
             <span class="kid-meta${k.unknown ? " unknown" : ""}">${metaText(k)}</span>
           </span>
@@ -862,8 +924,10 @@ function renderStage(p){
       </div>
       <p class="gen-label">Generation ${ROMAN[p.gen]}</p>
       <h3 id="focus-name" tabindex="-1">${escapeHTML(p.name)}</h3>
+      ${p.gu ? `<p class="gu-name" lang="gu">${escapeHTML(p.gu)}</p>` : ""}
       ${spouseHTML(p)}
       <p class="focus-meta">${p.parent ? `Child of ${escapeHTML(p.parent.name)} · ` : ""}${metaText(p)}</p>
+      ${p.place ? `<p class="place">${PIN}<span class="sr-only">Place: </span>${escapeHTML(p.place)}${p.placeGu ? ` <span lang="gu">${escapeHTML(p.placeGu)}</span>` : ""}</p>` : ""}
     </div>
     ${below}`;
 }
@@ -1025,28 +1089,44 @@ $("#copy-link").addEventListener("click", async e => {
 
 /* Finder */
 const list = $("#people-list");
-list.innerHTML = [...people.values()].map(p => `<option value="${escapeHTML(p.name)}">`).join("");
+list.innerHTML = [...new Set([...people.values()].map(p => p.name))].map(n => `<option value="${escapeHTML(n)}">`).join("");
+$("#finder-msg").addEventListener("click", e => {
+  const b = e.target.closest("button[data-id]");
+  if (!b) return;
+  $("#finder-msg").textContent = ""; $("#find").value = "";
+  go(b.dataset.id, { userInitiated: true });
+});
 $("#finder").addEventListener("submit", e => {
   e.preventDefault();
   const q = $("#find").value.trim().toLowerCase();
   const msg = $("#finder-msg");
   if (!q){ msg.textContent = "Type a name first."; return; }
   const all = [...people.values()];
-  const hit = all.find(p => p.name.toLowerCase() === q)
-           || all.find(p => p.name.toLowerCase().startsWith(q))
-           || all.find(p => p.name.toLowerCase().includes(q))
-           || all.find(p => p.spouse && p.spouse.toLowerCase().includes(q));
-  if (!hit){ msg.textContent = `No one called "${$("#find").value.trim()}" is in the tree yet.`; return; }
+  const raw = $("#find").value.trim();
+  const tiers = [
+    p => p.name.toLowerCase() === q || p.gu === raw,
+    p => p.name.toLowerCase().startsWith(q) || (p.gu && p.gu.startsWith(raw)),
+    p => p.name.toLowerCase().includes(q) || (p.gu && p.gu.includes(raw)),
+    p => p.spouse && p.spouse.toLowerCase().includes(q)
+  ];
+  let hits = [];
+  for (const t of tiers){ hits = all.filter(t); if (hits.length) break; }
+  if (!hits.length){ msg.textContent = `No one called "${raw}" is in the tree yet.`; return; }
+  if (hits.length > 1){
+    msg.innerHTML = `${hits.length} people match. Which one?<br>` +
+      hits.slice(0, 8).map(h => `<button type="button" data-id="${h.id}">${escapeHTML(h.name)} · ${escapeHTML(whoIs(h))}</button>`).join("");
+    return;
+  }
   msg.textContent = "";
   $("#find").value = "";
-  go(hit.id, { userInitiated: true });
+  go(hits[0].id, { userInitiated: true });
 });
 
 /* Directory */
 $("#gens").innerHTML = byGen.map((g, i) => `
   <div>
     <h3>Generation ${ROMAN[i]}</h3>
-    <ul>${g.map(p => `<li><button type="button" data-id="${p.id}">${escapeHTML(p.name)}${p.unknown ? '<span class="unknown-dot" title="Details to be added"> · details to come</span>' : ""}</button></li>`).join("")}</ul>
+    <ul>${g.map(p => `<li><button type="button" data-id="${p.id}">${escapeHTML(p.name)}${p.gu ? `<span class="gu" lang="gu">${escapeHTML(p.gu)}</span>` : ""}${isDup(p) ? `<span class="dup"> · ${escapeHTML(whoIs(p))}</span>` : ""}${p.unknown ? '<span class="unknown-dot" title="Details to be added"> · details to come</span>' : ""}</button></li>`).join("")}</ul>
   </div>`).join("");
 $("#gens").addEventListener("click", e => {
   const b = e.target.closest("button[data-id]");
