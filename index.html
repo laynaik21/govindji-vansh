@@ -1,0 +1,1073 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Govindji's Vansh — Our Family Tree</title>
+<meta name="description" content="The family tree of Govindji: seven generations grown from a single root. Open any branch to see the family that grew from it.">
+<!-- Shared by link only: ask search engines not to list this page -->
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="theme-color" content="#0e120f">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230e120f'/%3E%3Cpath d='M32 52V30M32 30c-8 0-14-6-14-14 8 0 14 6 14 14zm0 0c8 0 14-6 14-14-8 0-14 6-14 14zM32 40c-6 0-10-4-10-9M32 40c6 0 10-4 10-9' stroke='%23e3a94b' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Manrope:wght@400;500;600;700&family=Noto+Serif+Gujarati:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+/* =====================================================================
+   TWEAKABLES — colours, easing and timings all live here.
+   ===================================================================== */
+:root{
+  /* Colours */
+  --c-bg:            #0e120f;   /* night-forest page background   */
+  --c-bg-2:          #141a15;   /* alternate section background   */
+  --c-ink:           #f1e8d4;   /* main text (parchment)          */
+  --c-ink-dim:       #aaa38f;   /* secondary text                 */
+  --c-gold:          #e3a94b;   /* marigold accent                */
+  --c-gold-soft:     rgba(227,169,75,.16);
+  --c-vermilion:     #d65a3b;   /* kumkum accent                  */
+  --c-leaf:          #86a36f;   /* leaf green accent              */
+  --c-branch:        #c9984f;   /* branch / connector lines       */
+  --c-card:          #182019;   /* person card                    */
+  --c-card-edge:     rgba(241,232,212,.10);
+  --c-card-hover:    #1f2a20;
+  --c-focus:         #ffd683;   /* keyboard focus ring            */
+
+  /* Hero "shader" glow colours (r,g,b) */
+  --fx-glow-1: 227,169,75;
+  --fx-glow-2: 214,90,59;
+  --fx-glow-3: 134,163,111;
+
+  /* Easing — CSS curves and their GSAP equivalents */
+  --ease-out:        cubic-bezier(.16,1,.3,1);
+  --ease-in-out:     cubic-bezier(.65,0,.35,1);
+  --gsap-ease-out:   expo.out;
+  --gsap-ease-in:    power2.in;
+  --gsap-ease-soft:  power3.out;
+
+  /* Timings (ms) — read by the JavaScript too */
+  --t-fast:          180ms;
+  --t-fade:          320ms;   /* simple fades (also used for reduced motion) */
+  --t-retract:       380ms;   /* branches pulling back before a new tree    */
+  --t-flip:          850ms;   /* clicked person flying up to the top        */
+  --t-grow:          1100ms;  /* new branches growing                       */
+  --t-stagger:       70ms;    /* delay between each child appearing         */
+  --t-hero:          1500ms;  /* hero title reveal                          */
+  --t-trail-life:    1100ms;  /* how long each cursor seed lives            */
+
+  /* Effects */
+  --trail-density:   2;       /* seeds spawned per pointer move             */
+  --fireflies:       70;      /* glowing dots in the hero                   */
+  --parallax:        1;       /* 0 = off, 1 = normal, 2 = strong            */
+
+  /* Layout */
+  --radius:          18px;
+  --max:             1240px;
+  --gutter:          clamp(16px, 4vw, 48px);
+}
+
+/* Lenis */
+html.lenis, html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto !important}
+.lenis.lenis-smooth [data-lenis-prevent]{overscroll-behavior:contain}
+.lenis.lenis-stopped{overflow:hidden}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--c-bg); color:var(--c-ink);
+  font-family:"Manrope",system-ui,sans-serif; font-size:17px; line-height:1.6;
+  -webkit-font-smoothing:antialiased; overflow-x:hidden;
+}
+h1,h2,h3{font-family:"Fraunces",Georgia,serif; font-weight:400; line-height:1.05; margin:0; font-variation-settings:"opsz" 144}
+em{font-style:italic; color:var(--c-gold)}
+p{margin:0}
+button{font:inherit; color:inherit}
+a{color:var(--c-gold)}
+:focus{outline:none}
+:focus-visible{outline:3px solid var(--c-focus); outline-offset:4px; border-radius:6px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.skip{position:fixed;left:16px;top:-60px;z-index:100;background:var(--c-gold);color:#1a1205;padding:10px 16px;border-radius:10px;font-weight:700;text-decoration:none;transition:top var(--t-fast) var(--ease-out)}
+.skip:focus{top:16px}
+.wrap{max-width:var(--max); margin:0 auto; padding:0 var(--gutter)}
+.eyebrow{font-size:.78rem; letter-spacing:.22em; text-transform:uppercase; color:var(--c-gold); font-weight:600}
+.btn{
+  display:inline-flex; align-items:center; gap:.6em; padding:.9em 1.5em; border-radius:999px;
+  background:var(--c-gold); color:#1d1406; font-weight:700; text-decoration:none; border:0; cursor:pointer;
+  transition:transform var(--t-fast) var(--ease-out), box-shadow var(--t-fast) var(--ease-out);
+  box-shadow:0 10px 30px -10px rgba(227,169,75,.6);
+}
+.btn:hover{transform:translateY(-2px); box-shadow:0 16px 40px -12px rgba(227,169,75,.75)}
+.btn-ghost{background:transparent; color:var(--c-ink); border:1px solid var(--c-card-edge); box-shadow:none; font-weight:600; padding:.7em 1.2em; font-size:.9rem}
+.btn-ghost:hover{border-color:var(--c-gold); box-shadow:none}
+
+/* ---------------- Cursor trail ---------------- */
+#trail{position:fixed; inset:0; width:100%; height:100%; pointer-events:none; z-index:60}
+
+/* ---------------- Hero ---------------- */
+.hero{position:relative; min-height:100svh; display:grid; place-items:center; overflow:hidden; isolation:isolate}
+#hero-canvas{position:absolute; inset:0; width:100%; height:100%; z-index:-2}
+.hero::after{ /* film grain + vignette */
+  content:""; position:absolute; inset:0; z-index:-1; pointer-events:none;
+  background:
+    radial-gradient(120% 80% at 50% 40%, transparent 40%, rgba(5,7,5,.85) 100%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.09'/%3E%3C/svg%3E");
+}
+.hero-leaves{position:absolute; inset:0; z-index:-1; pointer-events:none}
+.hero-leaves svg{position:absolute; fill:none; stroke:var(--c-leaf); stroke-width:1.2; opacity:.35}
+.hero-inner{text-align:center; padding:120px var(--gutter) 140px; max-width:1100px}
+.hero .eyebrow{font-family:"Noto Serif Gujarati",serif; font-size:clamp(1.1rem,2.2vw,1.5rem); letter-spacing:.08em; text-transform:none; color:var(--c-gold); margin-bottom:1.2rem}
+.hero-title{font-size:clamp(3.4rem, 15.5vw, 11.5rem); letter-spacing:-.035em; font-weight:300}
+.hero-title .line{display:block; overflow:hidden; padding-bottom:.06em}
+.hero-title .line > span{display:inline-block}
+.hero-title em{font-weight:300}
+.hero-sub{max-width:34ch; margin:1.6rem auto 2.4rem; color:var(--c-ink-dim); font-size:clamp(1rem,1.6vw,1.2rem)}
+.scroll-cue{position:absolute; bottom:28px; left:50%; transform:translateX(-50%); font-size:.72rem; letter-spacing:.3em; text-transform:uppercase; color:var(--c-ink-dim); display:flex; flex-direction:column; align-items:center; gap:10px}
+.scroll-cue i{display:block; width:1px; height:46px; background:linear-gradient(var(--c-gold),transparent); animation:cue 2.2s var(--ease-in-out) infinite; transform-origin:top}
+@keyframes cue{0%{transform:scaleY(0)}50%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
+
+/* ---------------- Intro ---------------- */
+.intro{padding:clamp(90px,14vw,180px) 0}
+.intro-grid{display:grid; grid-template-columns:1.2fr 1fr; gap:clamp(32px,6vw,90px); align-items:end}
+.intro h2{font-size:clamp(2.4rem,6vw,5rem); letter-spacing:-.02em}
+.intro p{color:var(--c-ink-dim); font-size:1.08rem; max-width:46ch}
+.intro p + p{margin-top:1rem}
+.stats{display:grid; grid-template-columns:repeat(3,1fr); gap:1px; margin:clamp(60px,9vw,110px) 0 0; background:var(--c-card-edge); border-radius:var(--radius); overflow:hidden}
+.stats div{background:var(--c-bg); padding:28px 24px}
+.stats dt{font-size:.75rem; letter-spacing:.2em; text-transform:uppercase; color:var(--c-ink-dim)}
+.stats dd{margin:.4rem 0 0; font-family:"Fraunces",serif; font-size:clamp(2.6rem,6vw,4.6rem); line-height:1; color:var(--c-gold)}
+
+/* ---------------- Glance (whole tree) ---------------- */
+.glance{background:var(--c-bg-2); padding:clamp(60px,8vw,90px) 0 40px; position:relative}
+.glance-head{display:flex; justify-content:space-between; align-items:end; gap:24px; flex-wrap:wrap; margin-bottom:24px}
+.glance h2{font-size:clamp(2rem,4.6vw,3.6rem)}
+.glance-gen{font-family:"Fraunces",serif; font-style:italic; color:var(--c-gold); font-size:clamp(1.1rem,2vw,1.5rem)}
+.glance-scroll{overflow-x:auto; overflow-y:hidden; -webkit-overflow-scrolling:touch; padding-bottom:8px}
+#glance-svg{display:block; width:100%; height:calc(100svh - 15rem); min-height:420px}
+#glance-svg .g-link{fill:none; stroke:var(--c-branch); stroke-width:1.4; opacity:.75}
+#glance-svg .g-node circle{fill:var(--c-bg-2); stroke:var(--c-gold); stroke-width:2}
+#glance-svg .g-node.root circle{fill:var(--c-gold)}
+#glance-svg .g-node.unknown circle{stroke-dasharray:3 3; stroke:var(--c-ink-dim)}
+#glance-svg .g-node text{fill:var(--c-ink); font:500 13px "Manrope",sans-serif; paint-order:stroke; stroke:var(--c-bg-2); stroke-width:5px; stroke-linejoin:round}
+#glance-svg .g-node{cursor:pointer}
+#glance-svg .g-node:hover circle{fill:var(--c-gold)}
+#glance-svg .g-node:hover text{fill:var(--c-gold)}
+.phone-only{display:none}
+@media (max-width: 860px){ .phone-only{display:inline} }
+.glance .hint{color:var(--c-ink-dim); font-size:.9rem; margin-top:14px}
+
+/* ---------------- Explorer ---------------- */
+.explore{padding:clamp(70px,9vw,120px) 0 clamp(80px,10vw,140px); position:relative}
+.explore-top{display:flex; justify-content:space-between; gap:20px 32px; align-items:end; flex-wrap:wrap; margin-bottom:28px}
+.explore h2{font-size:clamp(2rem,4.6vw,3.6rem)}
+.explore-intro{color:var(--c-ink-dim); max-width:52ch; margin-top:.8rem}
+.finder{display:flex; flex-direction:column; gap:6px; min-width:min(100%,300px)}
+.finder label{font-size:.75rem; letter-spacing:.18em; text-transform:uppercase; color:var(--c-ink-dim)}
+.finder-row{display:flex; gap:8px}
+.finder input{
+  flex:1; min-width:0; background:var(--c-card); border:1px solid var(--c-card-edge); color:var(--c-ink);
+  border-radius:999px; padding:.75em 1.1em; font:inherit; font-size:.95rem;
+}
+.finder input::placeholder{color:#7c776a}
+.finder input:focus-visible{outline:3px solid var(--c-focus); outline-offset:2px}
+.finder-msg{font-size:.82rem; color:var(--c-vermilion); min-height:1.2em}
+
+.crumbs{margin:0 0 8px; padding:14px 0; border-top:1px solid var(--c-card-edge); border-bottom:1px solid var(--c-card-edge); display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap}
+.crumbs ol{list-style:none; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:4px 2px; align-items:center}
+.crumbs li{display:flex; align-items:center}
+.crumbs li + li::before{content:"›"; color:var(--c-ink-dim); margin:0 8px 0 6px}
+.crumbs button{background:none; border:0; cursor:pointer; color:var(--c-ink-dim); padding:4px 6px; border-radius:6px; font-size:.9rem}
+.crumbs button:hover{color:var(--c-gold)}
+.crumbs [aria-current]{color:var(--c-gold); font-weight:700; font-size:.9rem; padding:4px 6px}
+
+.stage{position:relative; padding:36px 0 10px; min-height:560px}
+.branches{position:absolute; left:0; top:0; pointer-events:none; overflow:visible; z-index:0}
+.branches .branch{fill:none; stroke:var(--c-branch); stroke-width:2; stroke-linecap:round}
+.branches .root-link{fill:none; stroke:var(--c-ink-dim); stroke-width:1.5; stroke-dasharray:2 7; stroke-linecap:round; opacity:.7}
+.branches .bud{fill:var(--c-gold)}
+.stage > *:not(.branches){position:relative; z-index:1}
+
+.up{display:flex; justify-content:center; min-height:44px; margin-bottom:26px}
+.up button{
+  background:transparent; border:1px solid var(--c-card-edge); color:var(--c-ink-dim); border-radius:999px; padding:.5em 1.1em; cursor:pointer; font-size:.88rem;
+  transition:color var(--t-fast), border-color var(--t-fast);
+}
+.up button:hover{color:var(--c-gold); border-color:var(--c-gold)}
+.up .root-tag{color:var(--c-ink-dim); font-size:.82rem; letter-spacing:.2em; text-transform:uppercase; align-self:center}
+
+.focus{display:flex; flex-direction:column; align-items:center; text-align:center}
+.pair{position:relative; display:flex; align-items:center; margin-bottom:18px}
+.ring{
+  width:clamp(104px,14vw,136px); aspect-ratio:1; border-radius:50%; display:grid; place-items:center;
+  font-family:"Fraunces",serif; font-style:italic; font-size:clamp(2.6rem,5vw,3.4rem); line-height:1;
+}
+.ring.self{background:radial-gradient(circle at 35% 30%, #f6c672, var(--c-gold) 55%, #b97a24); color:#24170a; box-shadow:0 0 0 8px var(--c-gold-soft), 0 24px 60px -18px rgba(227,169,75,.7); z-index:2}
+.ring.partner{
+  margin-left:-30px; background:var(--c-card); border:2px solid var(--c-vermilion); color:var(--c-vermilion);
+  width:clamp(84px,11vw,108px); font-size:clamp(2rem,4vw,2.6rem); z-index:1;
+}
+.ring.partner.empty{border-style:dashed; border-color:rgba(241,232,212,.35); color:var(--c-ink-dim); font-style:normal; font-family:"Manrope",sans-serif; font-size:1.8rem; font-weight:300}
+.knot{ /* the tie between the pair — a nod to the ganthbandhan knot */
+  position:absolute; left:calc(clamp(104px,14vw,136px) - 15px); top:50%; width:16px; height:16px;
+  transform:translate(-50%,-50%) rotate(45deg); border-radius:4px;
+  background:var(--c-vermilion); box-shadow:0 0 0 3px var(--c-bg), 0 0 18px rgba(214,90,59,.7); z-index:3;
+}
+.pair.no-spouse .knot{background:var(--c-bg); border:1.5px dashed rgba(241,232,212,.5); box-shadow:0 0 0 3px var(--c-bg)}
+.gen-label{font-size:.74rem; letter-spacing:.24em; text-transform:uppercase; color:var(--c-gold); font-weight:600}
+#focus-name:focus{outline:none}
+.focus h3{font-size:clamp(2.4rem,6vw,4.4rem); letter-spacing:-.02em; margin:.3rem 0 .2rem}
+.spouse-line{font-family:"Fraunces",serif; font-style:italic; font-size:1.15rem; color:var(--c-ink)}
+.spouse-line.empty{color:var(--c-ink-dim); font-size:1rem}
+.focus-meta{margin-top:.6rem; color:var(--c-ink-dim); font-size:.9rem}
+.focus-actions{margin-top:16px; display:flex; gap:10px; flex-wrap:wrap; justify-content:center}
+
+.kids{
+  list-style:none; margin:90px 0 0; padding:0;
+  display:grid; gap:18px; grid-template-columns:repeat(auto-fit, minmax(118px, 1fr));
+  max-width:calc(var(--n, 4) * 170px + (var(--n, 4) - 1) * 18px); margin-inline:auto;
+}
+.kids.many{row-gap:70px}
+.kid{
+  width:100%; height:100%; display:flex; flex-direction:column; align-items:center; text-align:center; gap:6px;
+  background:var(--c-card); border:1px solid var(--c-card-edge); border-radius:var(--radius);
+  padding:20px 12px 18px; cursor:pointer;
+  transition:transform var(--t-fast) var(--ease-out), background var(--t-fast), border-color var(--t-fast), box-shadow var(--t-fast);
+}
+.kid:hover{transform:translateY(-4px); background:var(--c-card-hover); border-color:rgba(227,169,75,.45); box-shadow:0 18px 40px -20px rgba(0,0,0,.8)}
+.kid:active{transform:translateY(-1px) scale(.98)}
+.kid-pair{display:flex; align-items:center; margin-bottom:6px}
+.kid-ring{width:52px; aspect-ratio:1; border-radius:50%; display:grid; place-items:center; background:radial-gradient(circle at 35% 30%, #f6c672, var(--c-gold) 60%, #b97a24); color:#24170a; font-family:"Fraunces",serif; font-style:italic; font-size:1.5rem; z-index:1}
+.kid-partner{width:34px; aspect-ratio:1; border-radius:50%; margin-left:-12px; border:1.5px solid var(--c-vermilion); background:var(--c-card)}
+.kid-partner.empty{border-style:dashed; border-color:rgba(241,232,212,.3)}
+.kid-text{display:flex; flex-direction:column; align-items:center; gap:6px; flex:1}
+.kid-name{font-family:"Fraunces",serif; font-size:1.25rem; line-height:1.15}
+.kid-spouse{font-size:.8rem; color:var(--c-ink-dim); font-style:italic}
+.kid-spouse.has{color:var(--c-ink)}
+.kid-meta{margin-top:auto; padding-top:6px; font-size:.7rem; letter-spacing:.14em; text-transform:uppercase; color:var(--c-leaf); font-weight:600}
+.kid-meta.unknown{color:var(--c-ink-dim)}
+
+.branch-note{
+  margin:80px auto 0; max-width:44ch; text-align:center; color:var(--c-ink-dim);
+  border:1px dashed rgba(241,232,212,.25); border-radius:var(--radius); padding:26px 28px; font-size:1rem;
+}
+.branch-note strong{display:block; font-family:"Fraunces",serif; font-weight:400; font-size:1.4rem; color:var(--c-ink); margin-bottom:6px}
+
+/* ---------------- Directory ---------------- */
+.directory{background:var(--c-bg-2); padding:clamp(70px,9vw,120px) 0}
+.directory h2{font-size:clamp(2rem,4.6vw,3.6rem); margin-bottom:.6rem}
+.directory > .wrap > p{color:var(--c-ink-dim); margin-bottom:40px; max-width:52ch}
+.gens{display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:28px 24px}
+.gens h3{font-size:1.05rem; font-style:italic; color:var(--c-gold); padding-bottom:10px; margin-bottom:8px; border-bottom:1px solid var(--c-card-edge)}
+.gens ul{list-style:none; margin:0; padding:0}
+.gens button{background:none; border:0; padding:5px 0; cursor:pointer; color:var(--c-ink); text-align:left; font-size:.98rem; transition:color var(--t-fast)}
+.gens button:hover{color:var(--c-gold)}
+.gens .unknown-dot{color:var(--c-ink-dim); font-size:.75rem; margin-left:4px}
+
+footer{padding:60px 0 70px; color:var(--c-ink-dim); font-size:.92rem}
+footer .wrap{display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap; border-top:1px solid var(--c-card-edge); padding-top:28px}
+footer .gu{font-family:"Noto Serif Gujarati",serif; color:var(--c-gold)}
+
+/* ---------------- Responsive ---------------- */
+@media (max-width: 860px){
+  .intro-grid{grid-template-columns:1fr}
+  .stats{grid-template-columns:1fr 1fr 1fr}
+  .stats div{padding:20px 14px}
+  #glance-svg{width:1100px; height:auto; min-height:0}
+  /* phones: one column hanging off a vertical trunk */
+  .kids, .kids.many{grid-template-columns:1fr; gap:12px; margin-top:56px; padding-left:38px; max-width:none}
+  .kid{flex-direction:row; text-align:left; align-items:center; gap:14px; padding:14px 16px}
+  .kid-pair{margin:0; flex:none}
+  .kid-text{align-items:flex-start; gap:2px}
+  .kid-meta{margin-top:4px; padding-top:0}
+}
+@media (max-width: 420px){
+  body{font-size:16px}
+  .stats dt{font-size:.62rem; letter-spacing:.12em}
+  .kid{padding:16px 8px 14px}
+  .kid-name{font-size:1.1rem}
+}
+
+/* ---------------- Reduced motion ---------------- */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:1ms !important; animation-iteration-count:1 !important; transition-duration:1ms !important; scroll-behavior:auto !important}
+  .scroll-cue i{animation:none}
+  .kid:hover{transform:none}
+}
+</style>
+</head>
+
+<body>
+<a class="skip" href="#explore">Skip to the family tree</a>
+<canvas id="trail" aria-hidden="true"></canvas>
+
+<!-- ================= HERO ================= -->
+<header class="hero" id="top">
+  <canvas id="hero-canvas" aria-hidden="true"></canvas>
+  <div class="hero-leaves" aria-hidden="true">
+    <svg data-speed="0.6" style="left:6%;top:14%;width:150px" viewBox="0 0 100 100"><path d="M50 95C50 60 30 40 10 30c30-5 50 15 40 65zM50 95c0-35 20-55 40-65-30-5-50 15-40 65z"/></svg>
+    <svg data-speed="1.1" style="right:8%;top:22%;width:110px" viewBox="0 0 100 100"><path d="M20 90C40 70 60 40 90 10 70 50 50 75 20 90zM20 90C30 60 55 35 90 10"/></svg>
+    <svg data-speed="0.35" style="left:12%;bottom:12%;width:90px" viewBox="0 0 100 100"><path d="M10 50c20-30 60-30 80 0-20 30-60 30-80 0zM10 50h80"/></svg>
+    <svg data-speed="0.9" style="right:14%;bottom:18%;width:130px" viewBox="0 0 100 100"><path d="M50 5c25 20 25 70 0 90-25-20-25-70 0-90zM50 5v90M50 40l-14-10M50 55l16-12M50 70l-14-10"/></svg>
+  </div>
+  <div class="hero-inner">
+    <p class="eyebrow" lang="gu">ગોવિંદજીનો વંશ</p>
+    <h1 class="hero-title" aria-label="Govindji's Vansh">
+      <span class="line" aria-hidden="true"><span>Govindji's</span></span>
+      <span class="line" aria-hidden="true"><span><em>Vansh</em></span></span>
+    </h1>
+    <p class="hero-sub">Seven generations grown from a single root. Open any branch and the family that grew from it unfolds.</p>
+    <a class="btn" href="#explore">Walk the tree <span aria-hidden="true">↓</span></a>
+  </div>
+  <div class="scroll-cue" aria-hidden="true">Scroll<i></i></div>
+</header>
+
+<main>
+<!-- ================= INTRO ================= -->
+<section class="intro" aria-labelledby="intro-h">
+  <div class="wrap">
+    <div class="intro-grid">
+      <h2 id="intro-h" data-reveal>Every family is a <em>banyan.</em></h2>
+      <div data-reveal>
+        <p>A banyan starts from one seed. Then it lets roots down from its own branches until a single tree becomes a whole grove.</p>
+        <p>Ours began with Govindji. This is a living record of everyone who grew from him: who belongs to which branch, and who they married. It keeps growing as names are added.</p>
+      </div>
+    </div>
+    <dl class="stats" data-reveal>
+      <div><dt>Generations</dt><dd id="stat-gens">7</dd></div>
+      <div><dt>Names so far</dt><dd id="stat-people">50</dd></div>
+      <div><dt>Root</dt><dd>1</dd></div>
+    </dl>
+  </div>
+</section>
+
+<!-- ================= GLANCE ================= -->
+<section class="glance" id="glance" aria-labelledby="glance-h">
+  <div class="wrap">
+    <div class="glance-head">
+      <div>
+        <p class="eyebrow">At a glance</p>
+        <h2 id="glance-h">The whole vansh, <em>root to leaf</em></h2>
+      </div>
+      <p class="glance-gen" aria-hidden="true">Generation <span id="glance-gen-n">VII</span></p>
+    </div>
+    <div class="glance-scroll" data-lenis-prevent-wheel>
+      <svg id="glance-svg" aria-hidden="true" preserveAspectRatio="xMidYMid meet"></svg>
+    </div>
+    <p class="hint"><span class="phone-only">Swipe sideways to see the whole tree. </span>Tap any name to open their branch. Every name is also listed at the bottom of the page.</p>
+  </div>
+</section>
+
+<!-- ================= EXPLORER ================= -->
+<section class="explore" id="explore" aria-labelledby="explore-h">
+  <div class="wrap">
+    <div class="explore-top">
+      <div>
+        <p class="eyebrow">Branch by branch</p>
+        <h2 id="explore-h">Walk the <em>tree</em></h2>
+        <p class="explore-intro">Each person opens into their own tree. Choose a child to step down a generation, or use the trail to climb back up.</p>
+      </div>
+      <form class="finder" id="finder" role="search" autocomplete="off">
+        <label for="find">Find a family member</label>
+        <div class="finder-row">
+          <input id="find" name="find" list="people-list" placeholder="Type a name, e.g. Keyur">
+          <button class="btn btn-ghost" type="submit">Go</button>
+        </div>
+        <datalist id="people-list"></datalist>
+        <p class="finder-msg" id="finder-msg" aria-live="polite"></p>
+      </form>
+    </div>
+
+    <nav class="crumbs" aria-label="Lineage trail">
+      <ol id="crumbs"></ol>
+      <button class="btn btn-ghost" id="copy-link" type="button">Copy link to this branch</button>
+    </nav>
+
+    <div class="stage" id="stage"></div>
+    <p class="sr-only" id="announce" aria-live="polite"></p>
+  </div>
+</section>
+
+<!-- ================= DIRECTORY ================= -->
+<section class="directory" aria-labelledby="dir-h">
+  <div class="wrap">
+    <p class="eyebrow">Every name</p>
+    <h2 id="dir-h">The vansh, <em>generation by generation</em></h2>
+    <p>Choose any name to open their branch in the tree above.</p>
+    <div class="gens" id="gens"></div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><span class="gu" lang="gu">ગોવિંદજીનો વંશ</span> · Govindji's Vansh</p>
+    <p>Know a missing name or a spouse's name? Tell Lay and the tree will grow.</p>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+
+<script>
+/* =====================================================================
+   THE FAMILY
+   ---------------------------------------------------------------------
+   To add a spouse:      { name: "Anilbhai", spouse: "Hansaben", ... }
+   To add a child:       add { name: "New Name" } inside "children".
+   unknown: true         = this branch's details are still being gathered.
+   ===================================================================== */
+const FAMILY =
+{ name: "Govindji", spouse: null, children: [
+  { name: "Nagar ji", spouse: null, children: [
+    { name: "Durlabhbhai", spouse: null, children: [
+      { name: "Ranchodji", spouse: null, children: [
+        { name: "Rameshbhai", spouse: null, children: [
+          { name: "Kartik", spouse: null, children: [
+            { name: "Aaryan", spouse: null }
+          ]}
+        ]}
+      ]}
+    ]},
+    { name: "Bhimbhai", spouse: null, children: [
+      { name: "Maganbhai", spouse: null, children: [
+        { name: "Ranjitbhai", spouse: null, children: [
+          { name: "Niraj", spouse: null, children: [
+            { name: "Durva", spouse: null }
+          ]}
+        ]}
+      ]},
+      { name: "Kamuben", spouse: null },
+      { name: "Chutobhai", spouse: null, children: [
+        { name: "Sureshbhai", spouse: null, children: [
+          { name: "Ankur", spouse: null, children: [ { name: "Isha", spouse: null } ]},
+          { name: "Jaymal", spouse: null, children: [ { name: "Hiyan", spouse: null } ]}
+        ]},
+        { name: "Gitaben", spouse: null, children: [ { name: "Apurva", spouse: null } ]},
+        { name: "Ashokbhai", spouse: null, children: [
+          { name: "Smit", spouse: null },
+          { name: "Richi", spouse: null }
+        ]},
+        { name: "Bharatbhai", spouse: null, children: [ { name: "Chirag", spouse: null } ]},
+        { name: "Minakshiben", spouse: null, unknown: true }
+      ]}
+    ]},
+    { name: "Dayalji", spouse: null, unknown: true },
+    { name: "Bhagwan ji", spouse: null, children: [
+      { name: "Anilbhai", spouse: null, children: [
+        { name: "Keyur", spouse: null, children: [ { name: "Lay", spouse: null } ]},
+        { name: "Uday", spouse: null, children: [
+          { name: "Jahan", spouse: null },
+          { name: "Hard", spouse: null }
+        ]},
+        { name: "Nipaben", spouse: null, children: [ { name: "Aatmi", spouse: null } ]}
+      ]},
+      { name: "Vinodbhai", spouse: null, children: [
+        { name: "Tejas", spouse: null, children: [
+          { name: "Dweep", spouse: null },
+          { name: "Ved", spouse: null }
+        ]},
+        { name: "Neha", spouse: null, children: [ { name: "Purv", spouse: null } ]}
+      ]},
+      { name: "Maherndrabhai", spouse: null, unknown: true },
+      { name: "Vasuben", spouse: null },
+      { name: "Harshaben", spouse: null }
+    ]},
+    { name: "Manchaben", spouse: null },
+    { name: "Bhuliben", spouse: null },
+    { name: "Kashiben", spouse: null },
+    { name: "Gangaben", spouse: null }
+  ]}
+]};
+
+/* =====================================================================
+   SETUP
+   ===================================================================== */
+(() => {
+"use strict";
+
+const $  = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const rootStyle = getComputedStyle(document.documentElement);
+const cssVar = n => rootStyle.getPropertyValue(n).trim();
+const secs   = n => (parseFloat(cssVar(n)) || 0) / 1000;
+const num    = n => parseFloat(cssVar(n)) || 0;
+const RM     = window.matchMedia("(prefers-reduced-motion: reduce)");
+const PHONE  = window.matchMedia("(max-width: 860px)");
+const reduced = () => RM.matches;
+const HAS_GSAP = !!window.gsap;
+const ROMAN = ["I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII"];
+const escapeHTML = s => String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+
+if (HAS_GSAP && window.ScrollTrigger) gsap.registerPlugin(ScrollTrigger);
+
+/* ---------- Index the family ---------- */
+const people = new Map();
+const byGen = [];
+const slug = s => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+(function walk(node, parent, gen){
+  let id = slug(node.name), n = 2;
+  while (people.has(id)) id = slug(node.name) + "-" + n++;
+  node.id = id; node.parent = parent; node.gen = gen;
+  node.children = node.children || [];
+  people.set(id, node);
+  (byGen[gen] = byGen[gen] || []).push(node);
+  node.children.forEach(c => walk(c, node, gen + 1));
+  node.descendants = node.children.reduce((s, c) => s + 1 + c.descendants, 0);
+})(FAMILY, null, 0);
+
+const initial = p => p.name.trim().charAt(0).toUpperCase();
+const lineage = p => { const a = []; for (let x = p; x; x = x.parent) a.unshift(x); return a; };
+const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
+function metaText(p){
+  if (p.children.length) return `${plural(p.children.length, "branch", "branches")}` + (p.descendants > p.children.length ? ` · ${p.descendants} descendants` : "");
+  if (p.unknown) return "Details to be added";
+  return "No branches yet";
+}
+
+$("#stat-gens").textContent = byGen.length;
+$("#stat-people").textContent = people.size;
+
+/* =====================================================================
+   SMOOTH SCROLL (Lenis) + ScrollTrigger sync
+   ===================================================================== */
+let lenis = null;
+if (!reduced() && window.Lenis){
+  lenis = new Lenis({ lerp: 0.1, smoothWheel: true });
+  if (HAS_GSAP){
+    if (window.ScrollTrigger) lenis.on("scroll", ScrollTrigger.update);
+    gsap.ticker.add(t => lenis.raf(t * 1000));
+    gsap.ticker.lagSmoothing(0);
+  } else {
+    const raf = t => { lenis.raf(t); requestAnimationFrame(raf); };
+    requestAnimationFrame(raf);
+  }
+}
+function scrollToEl(el){
+  if (lenis) lenis.scrollTo(el, { offset: -10, duration: 1.2 });
+  else el.scrollIntoView({ behavior: reduced() ? "auto" : "smooth", block: "start" });
+}
+document.addEventListener("click", e => {
+  const a = e.target.closest('a[href="#explore"]');
+  if (!a) return;
+  e.preventDefault();
+  scrollToEl($("#explore"));
+  $("#explore-h").setAttribute("tabindex", "-1");
+  $("#explore-h").focus({ preventScroll: true });
+});
+
+/* =====================================================================
+   HERO "SHADER" CANVAS — drifting glows + fireflies
+   Paused off-screen and when the tab is hidden. Static under reduced motion.
+   ===================================================================== */
+(function heroFX(){
+  const c = $("#hero-canvas"), ctx = c.getContext("2d");
+  const glows = [cssVar("--fx-glow-1"), cssVar("--fx-glow-2"), cssVar("--fx-glow-3")];
+  const blobs = [
+    { x:.25, y:.35, r:.55, c:0, a:.22, s:.00011, p:0 },
+    { x:.75, y:.30, r:.45, c:1, a:.14, s:.00008, p:2 },
+    { x:.55, y:.80, r:.60, c:2, a:.12, s:.00010, p:4 },
+    { x:.15, y:.85, r:.40, c:0, a:.10, s:.00013, p:1 }
+  ];
+  const flies = Array.from({ length: num("--fireflies") || 60 }, () => ({
+    x: Math.random(), y: Math.random(), z: .3 + Math.random() * .7,
+    p: Math.random() * Math.PI * 2, v: .00002 + Math.random() * .00005
+  }));
+  let w = 0, h = 0, dpr = 1, running = false, visible = true, raf = 0, last = 0;
+  const mouse = { x: .5, y: .5, tx: .5, ty: .5 };
+
+  function resize(){
+    dpr = Math.min(2, window.devicePixelRatio || 1);
+    w = c.clientWidth; h = c.clientHeight;
+    c.width = Math.round(w * dpr); c.height = Math.round(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    if (!running) draw(performance.now());
+  }
+  function draw(t){
+    ctx.globalCompositeOperation = "source-over";
+    ctx.fillStyle = "#0b0f0c"; ctx.fillRect(0, 0, w, h);
+    ctx.globalCompositeOperation = "lighter";
+    mouse.x += (mouse.tx - mouse.x) * .04; mouse.y += (mouse.ty - mouse.y) * .04;
+    const m = Math.max(w, h);
+    for (const b of blobs){
+      const cx = (b.x + Math.sin(t * b.s + b.p) * .08 + (mouse.x - .5) * .06) * w;
+      const cy = (b.y + Math.cos(t * b.s * 1.3 + b.p) * .07 + (mouse.y - .5) * .06) * h;
+      const r = b.r * m * (1 + Math.sin(t * b.s * 2 + b.p) * .08);
+      const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+      g.addColorStop(0, `rgba(${glows[b.c]},${b.a})`);
+      g.addColorStop(1, `rgba(${glows[b.c]},0)`);
+      ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
+    }
+    for (const f of flies){
+      const y = ((f.y - t * f.v * f.z) % 1 + 1) % 1;
+      const x = f.x + Math.sin(t * .0004 * f.z + f.p) * .015;
+      const a = (.35 + .65 * Math.max(0, Math.sin(t * .0016 * f.z + f.p))) * f.z;
+      const px = x * w, py = y * h, r = 1 + f.z * 1.6;
+      ctx.fillStyle = `rgba(${glows[0]},${a * .18})`;
+      ctx.beginPath(); ctx.arc(px, py, r * 4, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = `rgba(255,232,180,${a})`;
+      ctx.beginPath(); ctx.arc(px, py, r, 0, Math.PI * 2); ctx.fill();
+    }
+  }
+  function loop(t){
+    if (!running) return;
+    if (t - last > 15) { draw(t); last = t; }
+    raf = requestAnimationFrame(loop);
+  }
+  function update(){
+    const should = visible && !document.hidden && !reduced();
+    if (should && !running){ running = true; raf = requestAnimationFrame(loop); }
+    else if (!should && running){ running = false; cancelAnimationFrame(raf); }
+  }
+  new IntersectionObserver(es => { visible = es[0].isIntersecting; update(); }, { threshold: 0 }).observe(c);
+  document.addEventListener("visibilitychange", update);
+  RM.addEventListener?.("change", () => { update(); draw(performance.now()); });
+  window.addEventListener("pointermove", e => { mouse.tx = e.clientX / innerWidth; mouse.ty = e.clientY / innerHeight; }, { passive: true });
+  new ResizeObserver(resize).observe(c);
+  resize(); update();
+})();
+
+/* =====================================================================
+   CURSOR TRAIL — little golden seeds drifting off the pointer.
+   Off for reduced motion and touch screens. Only animates while seeds exist.
+   ===================================================================== */
+(function trail(){
+  const c = $("#trail"), ctx = c.getContext("2d");
+  const fine = matchMedia("(pointer: fine)");
+  const seeds = []; let raf = 0, dpr = 1, lastX = null, lastY = null;
+  const life = secs("--t-trail-life") * 1000 || 1000;
+  const density = num("--trail-density") || 2;
+  const gold = cssVar("--fx-glow-1");
+  function resize(){
+    dpr = Math.min(2, window.devicePixelRatio || 1);
+    c.width = innerWidth * dpr; c.height = innerHeight * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  resize(); window.addEventListener("resize", resize);
+  window.addEventListener("pointermove", e => {
+    if (reduced() || !fine.matches || e.pointerType !== "mouse") return;
+    const dx = lastX == null ? 0 : e.clientX - lastX, dy = lastY == null ? 0 : e.clientY - lastY;
+    lastX = e.clientX; lastY = e.clientY;
+    const speed = Math.min(1, Math.hypot(dx, dy) / 30);
+    const count = Math.round(density * (0.5 + speed));
+    for (let i = 0; i < count && seeds.length < 140; i++){
+      seeds.push({
+        x: e.clientX, y: e.clientY,
+        vx: (Math.random() - .5) * .6 - dx * .02, vy: (Math.random() - .5) * .6 - dy * .02 + .15,
+        r: 1.2 + Math.random() * 2.2, rot: Math.random() * Math.PI, vr: (Math.random() - .5) * .08,
+        born: performance.now()
+      });
+    }
+    if (!raf) raf = requestAnimationFrame(tick);
+  }, { passive: true });
+  function tick(now){
+    ctx.clearRect(0, 0, c.width, c.height);
+    for (let i = seeds.length - 1; i >= 0; i--){
+      const s = seeds[i], k = (now - s.born) / life;
+      if (k >= 1){ seeds.splice(i, 1); continue; }
+      s.x += s.vx; s.y += s.vy; s.vy += .012; s.vx *= .985; s.rot += s.vr;
+      ctx.save(); ctx.translate(s.x, s.y); ctx.rotate(s.rot);
+      ctx.fillStyle = `rgba(${gold},${(1 - k) * .85})`;
+      ctx.beginPath(); ctx.ellipse(0, 0, s.r * 1.8, s.r * .8, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.restore();
+    }
+    raf = seeds.length ? requestAnimationFrame(tick) : 0;
+    if (!raf) ctx.clearRect(0, 0, c.width, c.height);
+  }
+})();
+
+/* =====================================================================
+   HERO INTRO + PARALLAX + SECTION REVEALS
+   ===================================================================== */
+if (HAS_GSAP){
+  const easeOut = cssVar("--gsap-ease-out");
+  if (reduced()){
+    gsap.from(".hero-inner", { opacity: 0, duration: secs("--t-fade") * 2 });
+  } else {
+    gsap.timeline({ defaults: { ease: easeOut } })
+      .from(".hero .eyebrow", { opacity: 0, y: 20, duration: secs("--t-hero") * .6 })
+      .from(".hero-title .line > span", { yPercent: 110, rotate: 3, duration: secs("--t-hero"), stagger: .12 }, "<.1")
+      .from(".hero-sub, .hero .btn", { opacity: 0, y: 24, duration: secs("--t-hero") * .7, stagger: .1 }, "-=.9")
+      .from(".hero-leaves svg", { opacity: 0, scale: .8, duration: secs("--t-hero"), stagger: .1 }, "<");
+  }
+
+  if (window.ScrollTrigger){
+    const mm = gsap.matchMedia();
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
+      const strength = num("--parallax");
+      gsap.to(".hero-inner", { yPercent: 18 * strength, opacity: .2, ease: "none",
+        scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true } });
+      $$(".hero-leaves svg").forEach(svg => {
+        gsap.to(svg, { y: -260 * parseFloat(svg.dataset.speed) * strength, rotate: 25 * parseFloat(svg.dataset.speed), ease: "none",
+          scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true } });
+      });
+      $$("[data-reveal]").forEach(el => {
+        gsap.from(el, { opacity: 0, y: 50, duration: 1.1, ease: easeOut,
+          scrollTrigger: { trigger: el, start: "top 85%", once: true } });
+      });
+      ["#stat-gens", "#stat-people"].forEach(sel => {
+        const el = $(sel), target = parseInt(el.textContent, 10), o = { v: 0 };
+        gsap.to(o, { v: target, duration: 1.6, ease: "power2.out", onUpdate: () => el.textContent = Math.round(o.v),
+          scrollTrigger: { trigger: ".stats", start: "top 85%", once: true } });
+      });
+    });
+    mm.add("(prefers-reduced-motion: reduce)", () => {
+      $$("[data-reveal]").forEach(el => {
+        gsap.from(el, { opacity: 0, duration: secs("--t-fade") * 2, scrollTrigger: { trigger: el, start: "top 90%", once: true } });
+      });
+    });
+  }
+}
+
+/* =====================================================================
+   GLANCE — the whole tree, drawn generation by generation as you scroll
+   ===================================================================== */
+(function glance(){
+  const svg = $("#glance-svg"), NS = "http://www.w3.org/2000/svg";
+  const COL = 178, ROW = 30, PADX = 24, PADY = 24, LABEL = 120;
+  let leaf = 0;
+  const pos = new Map();
+  (function place(p){
+    let y;
+    if (!p.children.length) y = PADY + (leaf++) * ROW;
+    else { const ys = p.children.map(place); y = (ys[0] + ys[ys.length - 1]) / 2; }
+    pos.set(p.id, { x: PADX + p.gen * COL, y });
+    return y;
+  })(FAMILY);
+  const W = PADX + (byGen.length - 1) * COL + LABEL, H = PADY * 2 + (leaf - 1) * ROW;
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+
+  const linkGroups = byGen.map(() => document.createElementNS(NS, "g"));
+  const nodeGroups = byGen.map(() => document.createElementNS(NS, "g"));
+  linkGroups.forEach(g => svg.appendChild(g));
+  nodeGroups.forEach(g => svg.appendChild(g));
+
+  people.forEach(p => {
+    const a = pos.get(p.id);
+    if (p.parent){
+      const b = pos.get(p.parent.id), xm = (a.x + b.x) / 2;
+      const path = document.createElementNS(NS, "path");
+      path.setAttribute("d", `M${b.x} ${b.y} C${xm} ${b.y},${xm} ${a.y},${a.x} ${a.y}`);
+      path.setAttribute("class", "g-link");
+      linkGroups[p.gen].appendChild(path);
+    }
+    const g = document.createElementNS(NS, "g");
+    g.setAttribute("class", "g-node" + (p.gen === 0 ? " root" : "") + (p.unknown ? " unknown" : ""));
+    g.dataset.id = p.id;
+    g.innerHTML = `<circle cx="${a.x}" cy="${a.y}" r="${p.gen === 0 ? 8 : 6}"/><text x="${a.x + 12}" y="${a.y + 4.5}">${escapeHTML(p.name)}</text>`;
+    nodeGroups[p.gen].appendChild(g);
+  });
+
+  svg.addEventListener("click", e => {
+    const n = e.target.closest(".g-node");
+    if (!n) return;
+    go(n.dataset.id, { userInitiated: true });
+    scrollToEl($("#explore"));
+  });
+
+  if (!HAS_GSAP || !window.ScrollTrigger) return;
+  const label = $("#glance-gen-n");
+  const links = linkGroups.map(g => $$("path", g));
+  links.flat().forEach(p => { const L = p.getTotalLength(); p.dataset.len = L; });
+  const mm = gsap.matchMedia();
+  const build = (scrollTrigger) => {
+    links.flat().forEach(p => { p.style.strokeDasharray = p.dataset.len; p.style.strokeDashoffset = p.dataset.len; });
+    gsap.set(nodeGroups.slice(1), { opacity: 0 });
+    label.textContent = "I";
+    const tl = gsap.timeline({ scrollTrigger, defaults: { ease: "none" } });
+    for (let g = 1; g < byGen.length; g++){
+      tl.to(links[g], { strokeDashoffset: 0, duration: 1, stagger: .02 })
+        .to(nodeGroups[g], { opacity: 1, duration: .4 }, "-=.35");
+    }
+    // keep the label right when scrubbing backwards
+    tl.eventCallback("onUpdate", () => {
+      const g = Math.min(byGen.length - 1, Math.floor(tl.progress() * (byGen.length - 1) + .15));
+      label.textContent = ROMAN[g];
+    });
+    return () => {
+      links.flat().forEach(p => { p.style.strokeDasharray = ""; p.style.strokeDashoffset = ""; });
+      gsap.set(nodeGroups, { clearProps: "opacity" });
+      label.textContent = ROMAN[byGen.length - 1];
+    };
+  };
+  mm.add("(min-width: 861px) and (prefers-reduced-motion: no-preference)", () =>
+    build({ trigger: "#glance", start: "top top", end: "+=1800", scrub: .6, pin: true, anticipatePin: 1 }));
+  mm.add("(max-width: 860px) and (prefers-reduced-motion: no-preference)", () =>
+    build({ trigger: "#glance-svg", start: "top 80%", end: "bottom 60%", scrub: .5 }));
+})();
+
+/* =====================================================================
+   EXPLORER — one person at a time, their children as branches
+   ===================================================================== */
+const stage = $("#stage");
+const crumbs = $("#crumbs");
+const announce = $("#announce");
+let current = null;
+let busy = false;
+
+function personFromHash(){
+  const m = location.hash.match(/^#\/([a-z0-9-]+)$/);
+  return m && people.has(m[1]) ? m[1] : null;
+}
+
+function renderCrumbs(p){
+  crumbs.innerHTML = lineage(p).map((x, i, a) =>
+    i === a.length - 1
+      ? `<li><span aria-current="page">${escapeHTML(x.name)}</span></li>`
+      : `<li><button type="button" data-id="${x.id}">${escapeHTML(x.name)}</button></li>`
+  ).join("");
+}
+
+function spouseHTML(p){
+  return p.spouse
+    ? `<p class="spouse-line">&amp; ${escapeHTML(p.spouse)}</p>`
+    : `<p class="spouse-line empty">&amp; spouse · name to be added</p>`;
+}
+
+function renderStage(p){
+  const up = p.parent
+    ? `<button type="button" class="up-btn" data-id="${p.parent.id}"><span aria-hidden="true">↑</span> Back to ${escapeHTML(p.parent.name)}'s tree</button>`
+    : `<span class="root-tag">The root of the vansh</span>`;
+
+  const partner = p.spouse
+    ? `<span class="ring partner" aria-hidden="true">${escapeHTML(p.spouse.charAt(0).toUpperCase())}</span>`
+    : `<span class="ring partner empty" aria-hidden="true">+</span>`;
+
+  let below;
+  if (p.children.length){
+    below = `<ul class="kids${p.children.length > 6 ? " many" : ""}" style="--n:${p.children.length}" aria-label="${escapeHTML(p.name)}'s children">` +
+      p.children.map(k => `
+        <li><button type="button" class="kid" data-id="${k.id}">
+          <span class="kid-pair" aria-hidden="true"><span class="kid-ring">${escapeHTML(initial(k))}</span><span class="kid-partner${k.spouse ? "" : " empty"}"></span></span>
+          <span class="kid-text">
+            <span class="kid-name">${escapeHTML(k.name)}</span>
+            <span class="kid-spouse${k.spouse ? " has" : ""}">${k.spouse ? "&amp; " + escapeHTML(k.spouse) : "&amp; spouse to be added"}</span>
+            <span class="kid-meta${k.unknown ? " unknown" : ""}">${metaText(k)}</span>
+          </span>
+        </button></li>`).join("") + `</ul>`;
+  } else if (p.unknown){
+    below = `<p class="branch-note"><strong>This branch is still being traced</strong>The details of ${escapeHTML(p.name)}'s family haven't been gathered yet. If you know them, tell Lay and they'll be added here.</p>`;
+  } else {
+    below = `<p class="branch-note"><strong>A young branch</strong>No children are recorded for ${escapeHTML(p.name)} yet. New names will grow here as the family grows.</p>`;
+  }
+
+  stage.innerHTML = `
+    <svg class="branches" aria-hidden="true"></svg>
+    <div class="up">${up}</div>
+    <div class="focus">
+      <div class="pair${p.spouse ? "" : " no-spouse"}" aria-hidden="true">
+        <span class="ring self">${escapeHTML(initial(p))}</span>
+        <span class="knot"></span>
+        ${partner}
+      </div>
+      <p class="gen-label">Generation ${ROMAN[p.gen]}</p>
+      <h3 id="focus-name" tabindex="-1">${escapeHTML(p.name)}</h3>
+      ${spouseHTML(p)}
+      <p class="focus-meta">${p.parent ? `Child of ${escapeHTML(p.parent.name)} · ` : ""}${metaText(p)}</p>
+    </div>
+    ${below}`;
+}
+
+function drawBranches(){
+  const svg = $(".branches", stage);
+  if (!svg) return [];
+  const sr = stage.getBoundingClientRect();
+  svg.setAttribute("width", sr.width); svg.setAttribute("height", sr.height);
+  svg.setAttribute("viewBox", `0 0 ${sr.width} ${sr.height}`);
+  // measure layout boxes that are never transformed, so a running animation can't skew the lines
+  const ringEl = $(".ring.self", stage), pairBox = $(".pair", stage).getBoundingClientRect();
+  const ringX = pairBox.left + ringEl.offsetLeft + ringEl.offsetWidth / 2 - sr.left;
+  const ringTop = pairBox.top + ringEl.offsetTop - sr.top;
+  const focus = $(".focus", stage).getBoundingClientRect();
+  const x0 = focus.left + focus.width / 2 - sr.left;
+  const y0 = focus.bottom - sr.top + 14;
+  let html = "";
+
+  const upBtn = $(".up-btn, .root-tag", stage);
+  if (upBtn && current && current.parent){
+    const u = upBtn.getBoundingClientRect();
+    html += `<path class="root-link" d="M${ringX} ${u.bottom - sr.top + 4} L${ringX} ${ringTop - 10}"/>`;
+  }
+  const spine = PHONE.matches;
+  const list = $(".kids", stage);
+  const tx = list ? list.getBoundingClientRect().left - sr.left + 16 : 0;
+  $$(".kid", stage).forEach(k => {
+    const r = k.parentElement.getBoundingClientRect();
+    if (spine){
+      // trunk drops down the left edge, then curls into each card
+      const yc = r.top + r.height / 2 - sr.top, x1 = r.left - sr.left - 6;
+      html += `<path class="branch" d="M${x0} ${y0} C${x0} ${y0 + 34},${tx} ${y0 + 10},${tx} ${y0 + 54} L${tx} ${yc - 14} Q${tx} ${yc},${tx + 14} ${yc} L${x1} ${yc}"/>`;
+      html += `<circle class="bud" cx="${x1}" cy="${yc}" r="4"/>`;
+    } else {
+      const x1 = r.left + r.width / 2 - sr.left, y1 = r.top - sr.top - 6;
+      const dy = Math.max(30, (y1 - y0) * .55);
+      html += `<path class="branch" d="M${x0} ${y0} C${x0} ${y0 + dy},${x1} ${y1 - dy},${x1} ${y1}"/>`;
+      html += `<circle class="bud" cx="${x1}" cy="${y1}" r="4"/>`;
+    }
+  });
+  if (!$$(".kid", stage).length){
+    const note = $(".branch-note", stage);
+    if (note){
+      const n = note.getBoundingClientRect();
+      html += `<path class="branch" d="M${x0} ${y0} L${x0} ${n.top - sr.top - 6}" style="stroke-dasharray:3 6;opacity:.6"/>`;
+    }
+  }
+  svg.innerHTML = html;
+  const paths = $$(".branch", svg);
+  paths.forEach(p => p.dataset.len = p.getTotalLength());
+  return paths;
+}
+
+function rectCenter(r){ return { x: r.left + r.width / 2, y: r.top + r.height / 2, w: r.width }; }
+
+function show(id, { originEl = null, userInitiated = false } = {}){
+  const p = people.get(id);
+  if (!p) return;
+  const first = originEl ? rectCenter((originEl.querySelector(".kid-ring, .ring.self") || originEl).getBoundingClientRect()) : null;
+  current = p;
+  renderCrumbs(p);
+  renderStage(p);
+  const paths = drawBranches();
+  announce.textContent = `Showing ${p.name}'s branch. ${metaText(p)}.`;
+  document.title = `${p.name} · Govindji's Vansh`;
+  if (userInitiated) $("#focus-name").focus({ preventScroll: true });
+
+  if (!HAS_GSAP) return Promise.resolve();
+  const kids = $$(".kid, .branch-note", stage);
+  const textBits = $$(".gen-label, #focus-name, .spouse-line, .focus-meta, .up > *", stage);
+
+  if (reduced()){
+    return gsap.from(stage, { opacity: 0, duration: secs("--t-fade") }).then();
+  }
+
+  const easeOut = cssVar("--gsap-ease-out"), soft = cssVar("--gsap-ease-soft");
+  const tl = gsap.timeline();
+  paths.forEach(pa => { pa.style.strokeDasharray = pa.dataset.len; pa.style.strokeDashoffset = pa.dataset.len; });
+  const buds = $$(".bud", stage);
+  gsap.set(buds, { scale: 0, transformOrigin: "50% 50%", transformBox: "fill-box" });
+
+  const self = $(".ring.self", stage);
+  if (first){
+    const last = rectCenter(self.getBoundingClientRect());
+    tl.from(self, { x: first.x - last.x, y: first.y - last.y, scale: first.w / last.w, duration: secs("--t-flip"), ease: easeOut, clearProps: "transform" }, 0);
+  } else {
+    tl.from(self, { scale: .6, opacity: 0, duration: secs("--t-flip"), ease: easeOut, clearProps: "transform" }, 0);
+  }
+  tl.from($(".ring.partner", stage), { x: -40, opacity: 0, duration: secs("--t-flip") * .8, ease: soft, clearProps: "transform" }, secs("--t-flip") * .45)
+    .from($(".knot", stage), { scale: 0, opacity: 0, duration: .5, ease: "back.out(2)", clearProps: "transform" }, "<.15")
+    .from(textBits, { opacity: 0, y: 18, duration: .7, ease: soft, stagger: .05, clearProps: "transform" }, secs("--t-flip") * .35)
+    .to(paths, { strokeDashoffset: 0, duration: secs("--t-grow"), ease: "power2.inOut", stagger: secs("--t-stagger") * .6,
+      onComplete: () => paths.forEach(pa => { pa.style.strokeDasharray = ""; pa.style.strokeDashoffset = ""; }) }, secs("--t-flip") * .55)
+    .to(buds, { scale: 1, duration: .4, ease: "back.out(3)", stagger: secs("--t-stagger") * .6 }, `<${secs("--t-grow") * .7}`)
+    .from(kids, { opacity: 0, y: 30, duration: .8, ease: soft, stagger: secs("--t-stagger"), clearProps: "transform,opacity" }, "<-.15");
+  introTl = tl;
+  return Promise.resolve();
+}
+let introTl = null;
+
+function leave(originEl){
+  if (!HAS_GSAP) return Promise.resolve();
+  const dur = reduced() ? secs("--t-fade") : secs("--t-retract");
+  if (reduced()) return gsap.to(stage, { opacity: 0, duration: dur, clearProps: "opacity" }).then();
+  const tl = gsap.timeline();
+  const paths = $$(".branch", stage);
+  paths.forEach(p => { p.style.strokeDasharray = p.dataset.len; p.style.strokeDashoffset = 0; });
+  tl.to(paths, { strokeDashoffset: (i, el) => el.dataset.len, duration: dur, ease: cssVar("--gsap-ease-in") }, 0)
+    .to($$(".bud, .root-link", stage), { opacity: 0, duration: dur * .6 }, 0);
+  const others = $$(".kid, .branch-note, .focus, .up", stage).filter(el => el !== originEl);
+  tl.to(others, { opacity: 0, y: -14, duration: dur, ease: cssVar("--gsap-ease-in"), stagger: .015 }, 0);
+  if (originEl) tl.to(originEl, { y: -10, scale: 1.04, duration: dur, ease: "power2.out" }, 0);
+  return tl.then();
+}
+
+async function go(id, { push = true, originEl = null, userInitiated = false } = {}){
+  if (!people.has(id) || busy) return;
+  if (current && current.id === id) return;
+  busy = true;
+  // a new choice interrupts the previous grow-in animation instead of waiting for it
+  if (introTl){ introTl.progress(1).kill(); introTl = null; }
+  if (push && location.hash !== "#/" + id) history.pushState({ id }, "", "#/" + id);
+  try {
+    let first = null;
+    if (originEl) first = (originEl.querySelector(".kid-ring") || originEl);
+    // capture the clicked ring position BEFORE anything moves
+    const ghost = first ? first.getBoundingClientRect() : null;
+    if (current) await leave(originEl);
+    await show(id, { originEl: ghost ? { querySelector: () => null, getBoundingClientRect: () => ghost } : null, userInitiated });
+  } finally {
+    busy = false;
+    if (window.ScrollTrigger) ScrollTrigger.refresh();
+  }
+}
+
+stage.addEventListener("click", e => {
+  const b = e.target.closest("[data-id]");
+  if (!b) return;
+  go(b.dataset.id, { originEl: b.classList.contains("kid") ? b : null, userInitiated: true });
+});
+crumbs.addEventListener("click", e => {
+  const b = e.target.closest("button[data-id]");
+  if (b) go(b.dataset.id, { userInitiated: true });
+});
+window.addEventListener("popstate", () => {
+  const id = personFromHash();
+  if (id) go(id, { push: false });
+});
+new ResizeObserver(() => { if (!busy && !(introTl && introTl.isActive())) drawBranches(); }).observe(stage);
+
+/* Copy link */
+$("#copy-link").addEventListener("click", async e => {
+  const btn = e.currentTarget, url = location.href.split("#")[0] + "#/" + current.id;
+  try { await navigator.clipboard.writeText(url); btn.textContent = "Link copied ✓"; }
+  catch { prompt("Copy this link:", url); }
+  setTimeout(() => btn.textContent = "Copy link to this branch", 2000);
+});
+
+/* Finder */
+const list = $("#people-list");
+list.innerHTML = [...people.values()].map(p => `<option value="${escapeHTML(p.name)}">`).join("");
+$("#finder").addEventListener("submit", e => {
+  e.preventDefault();
+  const q = $("#find").value.trim().toLowerCase();
+  const msg = $("#finder-msg");
+  if (!q){ msg.textContent = "Type a name first."; return; }
+  const all = [...people.values()];
+  const hit = all.find(p => p.name.toLowerCase() === q)
+           || all.find(p => p.name.toLowerCase().startsWith(q))
+           || all.find(p => p.name.toLowerCase().includes(q))
+           || all.find(p => p.spouse && p.spouse.toLowerCase().includes(q));
+  if (!hit){ msg.textContent = `No one called "${$("#find").value.trim()}" is in the tree yet.`; return; }
+  msg.textContent = "";
+  $("#find").value = "";
+  go(hit.id, { userInitiated: true });
+});
+
+/* Directory */
+$("#gens").innerHTML = byGen.map((g, i) => `
+  <div>
+    <h3>Generation ${ROMAN[i]}</h3>
+    <ul>${g.map(p => `<li><button type="button" data-id="${p.id}">${escapeHTML(p.name)}${p.unknown ? '<span class="unknown-dot" title="Details to be added"> · details to come</span>' : ""}</button></li>`).join("")}</ul>
+  </div>`).join("");
+$("#gens").addEventListener("click", e => {
+  const b = e.target.closest("button[data-id]");
+  if (!b) return;
+  scrollToEl($("#explore"));
+  go(b.dataset.id, { userInitiated: true });
+});
+
+/* First paint */
+const startId = personFromHash() || FAMILY.id;
+if (!personFromHash()) history.replaceState({ id: startId }, "", location.pathname + location.search + "#/" + startId);
+current = null;
+busy = true;
+show(startId).finally(() => { busy = false; });
+if (personFromHash() && location.hash !== "#/" + FAMILY.id){
+  // someone opened a shared link to a branch: take them straight there
+  window.addEventListener("load", () => setTimeout(() => scrollToEl($("#explore")), 300));
+}
+document.fonts && document.fonts.ready.then(() => { if (!busy && !(introTl && introTl.isActive())) drawBranches(); if (window.ScrollTrigger) ScrollTrigger.refresh(); });
+
+})();
+</script>
+</body>
+</html>
