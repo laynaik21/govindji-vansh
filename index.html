@@ -707,7 +707,8 @@ await (async function mergeApproved(){
   let items = [];
   try {
     const ctl = new AbortController(), timer = setTimeout(() => ctl.abort(), 2500);
-    const r = await fetch(API + "/approved", { signal: ctl.signal });
+    // a new address every 10 seconds, so approvals and removals show up quickly
+    const r = await fetch(API + "/approved?v=" + Math.floor(Date.now() / 10000), { signal: ctl.signal });
     clearTimeout(timer);
     if (r.ok) items = (await r.json()).items || [];
   } catch { /* offline or inbox unavailable: show the tree as written */ }
