@@ -564,9 +564,16 @@ const FAMILY =
         ]},
         { name: "Hansa", g: "f", gu: "હંસા" },
         { name: "Veeru", g: "f", children: [
-          { name: "Kokila", g: "f", gu: "કોકિલા" },
-          { name: "Hemant", g: "m", gu: "હેમંત" },
-          { name: "Bharat", g: "m", gu: "ભરત" }
+          { name: "Hemantbhai", g: "m", gu: "હેમંત", spouse: "Jagrutiben", children: [
+            { name: "Darshna", g: "f", spouse: "Krutikbhai" }
+          ]},
+          { name: "Kokilaben", g: "f", gu: "કોકિલા", spouse: "Dilipbhai", children: [
+            { name: "Malvikaben", g: "f", spouse: "Himanshubhai" },
+            { name: "Darshanbhai", g: "m" }
+          ]},
+          { name: "Bharatbhai", g: "m", gu: "ભરત", spouse: "Divyaniben", children: [
+            { name: "Shivani", g: "f", spouse: "Ravi" }
+          ]}
         ]}
       ]}
     ]},
@@ -1030,7 +1037,7 @@ let busy = false;
 // links shared before some names were respelled keep working
 const OLD_IDS = { "nagar-ji":"nagarji", "bhagwan-ji":"bhagwanji", "durlabhbhai":"dullabhbhai", "ranchodji":"ranchhodji",
   "ranjitbhai":"ranjeet", "chutobhai":"khedubhai", "gitaben":"geetaben", "maherndrabhai":"mahendrabhai",
-  "nipaben":"nipa", "manchaben":"manchhaben", "bhargo":"bhago" };
+  "nipaben":"nipa", "manchaben":"manchhaben", "bhargo":"bhago", "kokila":"kokilaben", "hemant":"hemantbhai", "bharat":"bharatbhai-2" };
 function personFromHash(){
   const m = location.hash.match(/^#\/([a-z0-9-]+)$/);
   if (!m) return null;
