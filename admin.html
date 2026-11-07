@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Approvals · Govindji's Vansh</title>
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="theme-color" content="#0e120f">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Manrope:wght@400;500;600;700&family=Noto+Serif+Gujarati:wght@400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --c-bg:#0e120f; --c-bg-2:#141a15; --c-card:#182019; --c-edge:rgba(241,232,212,.10);
+  --c-ink:#f1e8d4; --c-dim:#aaa38f; --c-gold:#e3a94b; --c-gold-soft:rgba(227,169,75,.16);
+  --c-leaf:#86a36f; --c-red:#d65a3b; --c-rose:#e98f86; --c-focus:#ffd683;
+  --r:16px; --t:180ms;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0; background:var(--c-bg); color:var(--c-ink); font:16px/1.55 "Manrope",system-ui,sans-serif; -webkit-font-smoothing:antialiased}
+h1,h2{font-family:"Fraunces",Georgia,serif; font-weight:400; margin:0; line-height:1.1}
+em{color:var(--c-gold)}
+button,input,select,textarea{font:inherit; color:inherit}
+:focus-visible{outline:3px solid var(--c-focus); outline-offset:3px; border-radius:6px}
+.wrap{max-width:860px; margin:0 auto; padding:40px 16px 80px}
+.eyebrow{font-size:.75rem; letter-spacing:.22em; text-transform:uppercase; color:var(--c-gold); font-weight:600; margin:0 0 8px}
+h1{font-size:clamp(2.2rem,6vw,3.4rem)}
+.sub{color:var(--c-dim); margin:.6rem 0 28px}
+.btn{display:inline-flex; align-items:center; justify-content:center; gap:.5em; border:0; border-radius:999px; padding:.65em 1.2em; font-weight:700; cursor:pointer; transition:transform var(--t), opacity var(--t)}
+.btn:hover{transform:translateY(-1px)}
+.btn:disabled{opacity:.5; cursor:wait; transform:none}
+.approve{background:var(--c-gold); color:#1d1406}
+.reject{background:transparent; color:var(--c-ink); border:1px solid var(--c-edge)}
+.reject:hover{border-color:var(--c-red); color:var(--c-red)}
+.ghost{background:transparent; color:var(--c-dim); border:1px solid var(--c-edge); font-weight:600}
+.lock{max-width:420px; display:flex; flex-direction:column; gap:12px; margin-top:20px}
+.lock input{background:var(--c-card); border:1px solid var(--c-edge); border-radius:12px; padding:.8em 1em; font-size:1.05rem}
+.msg{min-height:1.3em; color:var(--c-red); font-size:.92rem}
+.msg.ok{color:var(--c-leaf)}
+.tabs{display:flex; gap:6px; flex-wrap:wrap; margin:0 0 22px}
+.tabs button{background:none; border:1px solid var(--c-edge); color:var(--c-dim); border-radius:999px; padding:.45em 1em; cursor:pointer; font-size:.9rem}
+.tabs button[aria-pressed="true"]{border-color:var(--c-gold); color:var(--c-gold); background:var(--c-gold-soft)}
+.tabs .n{font-weight:700; margin-left:4px}
+.bar{display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap}
+.list{display:flex; flex-direction:column; gap:16px}
+.card{background:var(--c-card); border:1px solid var(--c-edge); border-radius:var(--r); padding:20px clamp(16px,3vw,24px); display:flex; flex-direction:column; gap:14px}
+.card.approved{border-color:rgba(134,163,111,.45)}
+.card.rejected{opacity:.65}
+.what{font-family:"Fraunces",serif; font-size:1.35rem; line-height:1.25}
+.path{color:var(--c-dim); font-size:.85rem}
+.meta{display:flex; gap:6px 16px; flex-wrap:wrap; font-size:.82rem; color:var(--c-dim)}
+.badge{font-size:.7rem; letter-spacing:.14em; text-transform:uppercase; font-weight:700; padding:.25em .7em; border-radius:999px; border:1px solid currentColor}
+.badge.pending{color:var(--c-gold)} .badge.approved{color:var(--c-leaf)} .badge.rejected{color:var(--c-red)}
+.grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px}
+.grid label{display:flex; flex-direction:column; gap:5px; font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--c-dim)}
+.grid input,.grid select{background:var(--c-bg-2); border:1px solid var(--c-edge); border-radius:10px; padding:.6em .8em; font-size:1rem; letter-spacing:0; text-transform:none; color:var(--c-ink)}
+.note{background:var(--c-bg-2); border-left:3px solid var(--c-gold); padding:12px 14px; border-radius:8px; white-space:pre-wrap}
+.hint{font-size:.82rem; color:var(--c-dim)}
+.actions{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+.actions a{color:var(--c-gold); font-size:.88rem; margin-left:auto}
+.empty{color:var(--c-dim); text-align:center; padding:50px 10px; border:1px dashed var(--c-edge); border-radius:var(--r)}
+@media (prefers-reduced-motion: reduce){ *{transition:none !important} }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <p class="eyebrow">Govindji's Vansh</p>
+  <h1>Approvals</h1>
+  <p class="sub">Names your relatives suggest wait here. Nothing reaches the family tree until you approve it.</p>
+
+  <section id="lock" aria-labelledby="lock-h">
+    <h2 id="lock-h" style="font-size:1.4rem">Enter your passcode</h2>
+    <form class="lock" id="lock-form">
+      <label for="key" class="hint">The passcode you saved in Vercel as ADMIN_KEY</label>
+      <input id="key" type="password" autocomplete="current-password" required>
+      <button class="btn approve" type="submit">Open approvals</button>
+      <p class="msg" id="lock-msg" role="alert"></p>
+    </form>
+  </section>
+
+  <section id="panel" hidden aria-label="Suggestions">
+    <div class="bar">
+      <div class="tabs" role="group" aria-label="Show">
+        <button type="button" data-tab="pending" aria-pressed="true">Waiting<span class="n" id="n-pending"></span></button>
+        <button type="button" data-tab="approved" aria-pressed="false">Approved<span class="n" id="n-approved"></span></button>
+        <button type="button" data-tab="rejected" aria-pressed="false">Rejected<span class="n" id="n-rejected"></span></button>
+      </div>
+      <div class="actions"><button class="btn ghost" id="refresh" type="button">Refresh</button><button class="btn ghost" id="logout" type="button">Lock</button></div>
+    </div>
+    <p class="msg" id="panel-msg" role="status" aria-live="polite"></p>
+    <div class="list" id="list"></div>
+  </section>
+</main>
+
+<script>
+(() => {
+"use strict";
+const API = "https://govindji-vansh.vercel.app/api";
+const SITE = "https://laynaik21.github.io/govindji-vansh/";
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+const ss = { get(){ try { return sessionStorage.getItem("gv-admin") || ""; } catch { return ""; } },
+             set(v){ try { sessionStorage.setItem("gv-admin", v); } catch {} },
+             clear(){ try { sessionStorage.removeItem("gv-admin"); } catch {} } };
+let key = ss.get(), items = [], tab = "pending";
+
+async function api(method, body){
+  const r = await fetch(API + "/admin", { method, headers: { "Content-Type": "application/json", "X-Admin-Key": key }, body: body ? JSON.stringify(body) : undefined, cache: "no-store" });
+  const j = await r.json().catch(() => ({}));
+  if (r.status === 401) throw Object.assign(new Error(j.error), { auth: true });
+  if (!r.ok) throw new Error(j.error || "Request failed");
+  return j;
+}
+async function load(){
+  $("#panel-msg").className = "msg ok"; $("#panel-msg").textContent = "Loading…";
+  try {
+    items = (await api("GET")).items || [];
+    $("#lock").hidden = true; $("#panel").hidden = false;
+    $("#panel-msg").textContent = "";
+    render();
+  } catch (e) {
+    if (e.auth){
+      ss.clear(); key = "";
+      $("#lock").hidden = false; $("#panel").hidden = true;
+      $("#lock-msg").textContent = e.message === "not-configured"
+        ? "The passcode hasn't been set up in Vercel yet (ADMIN_KEY)."
+        : "That passcode isn't right.";
+    } else { $("#panel-msg").className = "msg"; $("#panel-msg").textContent = "Couldn't load suggestions: " + e.message; }
+  }
+}
+const when = t => new Date(t).toLocaleString(undefined, { day: "numeric", month: "short", year: "numeric", hour: "numeric", minute: "2-digit" });
+function title(s){
+  const f = { ...s, ...(s.final || {}) };
+  if (s.type === "child") return `${f.g === "f" ? "Daughter" : "Son"} of <em>${esc(s.personName)}</em>: ${esc(f.name)}`;
+  if (s.type === "spouse") return `Spouse of <em>${esc(s.personName)}</em>: ${esc(f.spouse)}`;
+  return `Note about <em>${esc(s.personName)}</em>`;
+}
+function fields(s){
+  const f = { ...s, ...(s.final || {}) };
+  if (s.type === "child") return `<div class="grid">
+      <label>Name<input data-f="name" value="${esc(f.name)}"></label>
+      <label>Son or daughter<select data-f="g"><option value="m"${f.g === "m" ? " selected" : ""}>Son</option><option value="f"${f.g === "f" ? " selected" : ""}>Daughter</option></select></label>
+      <label>Gujarati<input data-f="gu" lang="gu" value="${esc(f.gu)}"></label>
+      <label>Their spouse<input data-f="spouse" value="${esc(f.spouse)}"></label>
+    </div><p class="hint">You can fix the spelling before approving.</p>`;
+  if (s.type === "spouse") return `<div class="grid"><label>Spouse's name<input data-f="spouse" value="${esc(f.spouse)}"></label></div>
+    <p class="hint">Approving sets this as ${esc(s.personName)}'s spouse on the tree.</p>`;
+  return `<p class="note">${esc(s.note)}</p><p class="hint">Notes aren't applied automatically. Approve to keep track of it, then ask Claude to make the change.</p>`;
+}
+function render(){
+  const counts = { pending: 0, approved: 0, rejected: 0 };
+  items.forEach(s => counts[s.status]++);
+  Object.keys(counts).forEach(k => $("#n-" + k).textContent = counts[k] ? " " + counts[k] : "");
+  document.querySelectorAll("[data-tab]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.tab === tab)));
+  const shown = items.filter(s => s.status === tab);
+  $("#list").innerHTML = shown.length ? shown.map(s => `
+    <article class="card ${s.status}" data-id="${esc(s.id)}">
+      <div class="bar"><span class="badge ${s.status}">${s.status === "pending" ? "Waiting" : s.status}</span><span class="hint">${when(s.createdAt)}</span></div>
+      <h2 class="what">${title(s)}</h2>
+      <p class="path">${esc(s.personPath || s.personName)}</p>
+      ${fields(s)}
+      <div class="meta"><span>Sent by <strong>${esc(s.from)}</strong></span>${s.decidedAt ? `<span>Decided ${when(s.decidedAt)}</span>` : ""}</div>
+      <div class="actions">
+        ${s.status !== "approved" ? `<button class="btn approve" data-act="approved" type="button">Approve</button>` : ""}
+        ${s.status !== "rejected" ? `<button class="btn reject" data-act="rejected" type="button">${s.status === "approved" ? "Remove from tree" : "Reject"}</button>` : ""}
+        ${s.status !== "pending" ? `<button class="btn ghost" data-act="pending" type="button">Move back to waiting</button>` : ""}
+        <a href="${SITE}#/${encodeURIComponent(s.personId)}" target="_blank" rel="noopener">View ${esc(s.personName)} on the tree ↗</a>
+      </div>
+    </article>`).join("")
+    : `<p class="empty">${tab === "pending" ? "Nothing waiting. All caught up." : "Nothing here yet."}</p>`;
+}
+$("#list").addEventListener("click", async e => {
+  const b = e.target.closest("[data-act]"); if (!b) return;
+  const card = b.closest(".card"), id = card.dataset.id;
+  const final = {};
+  card.querySelectorAll("[data-f]").forEach(el => final[el.dataset.f] = el.value.trim());
+  card.querySelectorAll("button").forEach(x => x.disabled = true);
+  try {
+    await api("POST", { id, status: b.dataset.act, final });
+    const s = items.find(x => x.id === id);
+    s.status = b.dataset.act; s.decidedAt = Date.now(); s.final = final;
+    $("#panel-msg").className = "msg ok";
+    $("#panel-msg").textContent = b.dataset.act === "approved" ? "Approved. It will show on the tree within a few seconds." : b.dataset.act === "rejected" ? "Done. It won't appear on the tree." : "Moved back to waiting.";
+    render();
+  } catch (err) {
+    if (err.auth) return load();
+    $("#panel-msg").className = "msg"; $("#panel-msg").textContent = "Couldn't save: " + err.message;
+    card.querySelectorAll("button").forEach(x => x.disabled = false);
+  }
+});
+document.querySelectorAll("[data-tab]").forEach(b => b.addEventListener("click", () => { tab = b.dataset.tab; render(); }));
+$("#refresh").addEventListener("click", load);
+$("#logout").addEventListener("click", () => { ss.clear(); key = ""; $("#panel").hidden = true; $("#lock").hidden = false; $("#key").value = ""; $("#key").focus(); });
+$("#lock-form").addEventListener("submit", e => { e.preventDefault(); key = $("#key").value.trim(); $("#lock-msg").textContent = ""; ss.set(key); load(); });
+if (key) load(); else $("#key").focus();
+})();
+</script>
+</body>
+</html>

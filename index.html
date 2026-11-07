@@ -284,6 +284,42 @@ a{color:var(--c-gold)}
 }
 .branch-note strong{display:block; font-family:"Fraunces",serif; font-weight:400; font-size:1.4rem; color:var(--c-ink); margin-bottom:6px}
 
+.chip{background:transparent; border:1px dashed rgba(241,232,212,.28); color:var(--c-ink-dim); border-radius:999px; padding:.45em 1em; font-size:.82rem; cursor:pointer; transition:color var(--t-fast), border-color var(--t-fast)}
+.chip:hover{color:var(--c-gold); border-color:var(--c-gold); border-style:solid}
+
+/* ---------------- Suggest dialog ---------------- */
+#suggest{border:1px solid var(--c-card-edge); border-radius:22px; padding:0; width:min(520px, calc(100vw - 24px)); max-height:calc(100svh - 24px); overflow:auto; background:var(--c-bg-2); color:var(--c-ink); box-shadow:0 40px 120px -30px rgba(0,0,0,.9)}
+#suggest::backdrop{background:rgba(5,7,5,.72); backdrop-filter:blur(4px)}
+#sg-form, .sg-done{padding:26px clamp(18px,4vw,30px) 24px; display:flex; flex-direction:column; gap:16px}
+.sg-head{display:flex; justify-content:space-between; gap:12px; align-items:start}
+#suggest h2{font-size:clamp(1.7rem,4vw,2.2rem)}
+.sg-about{color:var(--c-ink-dim); font-size:.9rem; margin-top:4px}
+.sg-x{background:none; border:1px solid var(--c-card-edge); color:var(--c-ink); width:38px; height:38px; border-radius:50%; font-size:1.3rem; cursor:pointer; flex:none}
+#suggest fieldset{border:0; margin:0; padding:0; display:flex; flex-direction:column; gap:8px}
+#suggest legend{font-size:.75rem; letter-spacing:.16em; text-transform:uppercase; color:var(--c-ink-dim); margin-bottom:8px; padding:0}
+.sg-type label{display:flex; gap:10px; align-items:center; padding:10px 14px; border:1px solid var(--c-card-edge); border-radius:12px; cursor:pointer; font-size:.95rem}
+.sg-type label:has(input:checked){border-color:var(--c-gold); background:var(--c-gold-soft)}
+.sg-inline{flex-direction:row !important; flex-wrap:wrap; gap:8px 18px !important}
+.sg-inline legend{width:100%}
+.sg-inline label{display:flex; gap:8px; align-items:center; cursor:pointer}
+#suggest input[type="radio"]{accent-color:var(--c-gold); width:18px; height:18px; margin:0}
+[data-for]{display:flex; flex-direction:column; gap:14px}
+[data-for][hidden]{display:none}
+.field{display:flex; flex-direction:column; gap:6px; font-size:.82rem; color:var(--c-ink-dim); letter-spacing:.04em}
+.field .opt{font-size:.72rem; opacity:.75; margin-left:6px}
+.field input, .field textarea{background:var(--c-card); border:1px solid var(--c-card-edge); color:var(--c-ink); border-radius:12px; padding:.75em .95em; font:inherit; font-size:1rem; letter-spacing:0; resize:vertical}
+.field input:focus-visible, .field textarea:focus-visible{outline:3px solid var(--c-focus); outline-offset:1px}
+.sg-hp{position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden}
+.sg-note{font-size:.82rem; color:var(--c-leaf)}
+.sg-msg{font-size:.88rem; min-height:1.2em; color:var(--c-ink-dim)}
+.sg-msg.err{color:var(--c-vermilion)}
+.sg-actions{display:flex; justify-content:flex-end; gap:10px; flex-wrap:wrap}
+.sg-actions .btn{padding:.75em 1.3em}
+.btn:disabled{opacity:.6; cursor:wait}
+.sg-done{align-items:flex-start}
+#sg-form[hidden], .sg-done[hidden]{display:none}
+.sg-done p:not(.eyebrow){color:var(--c-ink-dim)}
+
 /* ---------------- Directory ---------------- */
 .directory{background:var(--c-bg-2); padding:clamp(70px,9vw,120px) 0}
 .directory h2{font-size:clamp(2rem,4.6vw,3.6rem); margin-bottom:.6rem}
@@ -438,6 +474,55 @@ footer .gu{font-family:"Noto Serif Gujarati",serif; color:var(--c-gold)}
   </div>
 </section>
 </main>
+
+<dialog id="suggest" aria-labelledby="sg-title" data-lenis-prevent>
+  <form id="sg-form" novalidate>
+    <div class="sg-head">
+      <div>
+        <p class="eyebrow">Help the tree grow</p>
+        <h2 id="sg-title">Add a missing name</h2>
+        <p class="sg-about" id="sg-about"></p>
+      </div>
+      <button type="button" class="sg-x" aria-label="Close">×</button>
+    </div>
+    <fieldset class="sg-type">
+      <legend>What would you like to add?</legend>
+      <label><input type="radio" name="type" value="child"> <span id="sg-l-child">A son or daughter</span></label>
+      <label><input type="radio" name="type" value="spouse"> <span id="sg-l-spouse">Spouse's name</span></label>
+      <label><input type="radio" name="type" value="other"> Something else or a correction</label>
+    </fieldset>
+    <div data-for="child">
+      <label class="field">Child's name<input name="name" maxlength="60" autocomplete="off"></label>
+      <fieldset class="sg-inline">
+        <legend>Son or daughter?</legend>
+        <label><input type="radio" name="g" value="m"> Son</label>
+        <label><input type="radio" name="g" value="f"> Daughter</label>
+      </fieldset>
+      <label class="field"><span>Name in Gujarati <span class="opt">optional</span></span><input name="gu" lang="gu" maxlength="60" autocomplete="off"></label>
+      <label class="field"><span>Their spouse <span class="opt">optional</span></span><input name="childSpouse" maxlength="60" autocomplete="off"></label>
+    </div>
+    <div data-for="spouse">
+      <label class="field">Spouse's name<input name="spouse" maxlength="60" autocomplete="off"></label>
+    </div>
+    <div data-for="other">
+      <label class="field">What should change?<textarea name="note" rows="4" maxlength="600" placeholder="e.g. Ramanbhai's daughter is spelled Divyaben"></textarea></label>
+    </div>
+    <label class="field">Your name<input name="from" maxlength="60" autocomplete="name"></label>
+    <p class="sg-hp" aria-hidden="true"><label>Leave this empty<input name="website" tabindex="-1" autocomplete="off"></label></p>
+    <p class="sg-note">Nothing appears on the tree until Lay checks and approves it.</p>
+    <p class="sg-msg" id="sg-msg" role="status" aria-live="polite"></p>
+    <div class="sg-actions">
+      <button type="button" class="btn btn-ghost sg-cancel">Cancel</button>
+      <button type="submit" class="btn">Send for approval</button>
+    </div>
+  </form>
+  <div class="sg-done" hidden>
+    <p class="eyebrow">Sent</p>
+    <h2>Thank you!</h2>
+    <p>Lay will check it, and once approved it will appear on the tree for everyone.</p>
+    <button type="button" class="btn sg-cancel">Done</button>
+  </div>
+</dialog>
 
 <footer>
   <div class="wrap">
@@ -595,7 +680,7 @@ const FAMILY =
 /* =====================================================================
    SETUP
    ===================================================================== */
-(() => {
+(async () => {
 "use strict";
 
 const $  = (s, r = document) => r.querySelector(s);
@@ -612,11 +697,44 @@ const ROMAN = ["I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII"];
 const escapeHTML = s => String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
 
 if (HAS_GSAP && window.ScrollTrigger) gsap.registerPlugin(ScrollTrigger);
+const slug = s => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+
+/* ---------- Approved suggestions from relatives ----------
+   Suggestions sent from the site wait in a private inbox until Lay approves them.
+   Approved ones are fetched here and grafted onto the tree before it is drawn. */
+const API = "https://govindji-vansh.vercel.app/api";
+await (async function mergeApproved(){
+  let items = [];
+  try {
+    const ctl = new AbortController(), timer = setTimeout(() => ctl.abort(), 2500);
+    const r = await fetch(API + "/approved", { signal: ctl.signal });
+    clearTimeout(timer);
+    if (r.ok) items = (await r.json()).items || [];
+  } catch { /* offline or inbox unavailable: show the tree as written */ }
+  if (!items.length) return;
+  const byId = new Map(), seen = new Set();
+  (function w(n){
+    let id = slug(n.name), k = 2;
+    while (seen.has(id)) id = slug(n.name) + "-" + k++;
+    seen.add(id); byId.set(id, n);
+    (n.children || []).forEach(w);
+  })(FAMILY);
+  for (const it of items){
+    const p = byId.get(it.personId);
+    if (!p) continue;
+    if (it.type === "spouse" && it.spouse) p.spouse = it.spouse;
+    if (it.type === "child" && it.name){
+      p.children = p.children || [];
+      if (p.children.some(c => c.name.toLowerCase() === it.name.toLowerCase())) continue; // already written into the file
+      p.unknown = false;
+      p.children.push({ name: it.name, g: it.g || undefined, gu: it.gu || undefined, spouse: it.spouse || undefined });
+    }
+  }
+})();
 
 /* ---------- Index the family ---------- */
 const people = new Map();
 const byGen = [];
-const slug = s => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 (function walk(node, parent, gen){
   let id = slug(node.name), n = 2;
   while (people.has(id)) id = slug(node.name) + "-" + n++;
@@ -1113,6 +1231,11 @@ function renderStage(p){
       ${spouseHTML(p)}
       <p class="focus-meta">${p.parent ? `${rel(p)} of ${escapeHTML(p.parent.name)} · ` : ""}${metaText(p)}</p>
       ${p.place ? `<p class="place">${PIN}<span class="sr-only">Place: </span>${escapeHTML(p.place)}${p.placeGu ? ` <span lang="gu">${escapeHTML(p.placeGu)}</span>` : ""}</p>` : ""}
+      <div class="focus-actions">
+        <button type="button" class="chip" data-suggest="child"><span aria-hidden="true">+</span> Add a son or daughter</button>
+        <button type="button" class="chip" data-suggest="spouse">${p.spouse ? "Correct spouse's name" : '<span aria-hidden="true">+</span> Add spouse\'s name'}</button>
+        <button type="button" class="chip" data-suggest="other">Suggest a correction</button>
+      </div>
     </div>
     ${below}`;
 }
@@ -1250,6 +1373,8 @@ async function go(id, { push = true, originEl = null, userInitiated = false } = 
 }
 
 stage.addEventListener("click", e => {
+  const sg = e.target.closest("[data-suggest]");
+  if (sg){ openSuggest(sg.dataset.suggest); return; }
   const b = e.target.closest("[data-id]");
   if (!b) return;
   go(b.dataset.id, { originEl: b.classList.contains("kid") ? b : null, userInitiated: true });
@@ -1305,6 +1430,64 @@ $("#finder").addEventListener("submit", e => {
   msg.textContent = "";
   $("#find").value = "";
   go(hits[0].id, { userInitiated: true });
+});
+
+/* ---------- "Add a missing name" form ---------- */
+const dlg = $("#suggest"), form = $("#sg-form"), sgMsg = $("#sg-msg");
+const store = { get: k => { try { return localStorage.getItem(k) || ""; } catch { return ""; } },
+                set: (k, v) => { try { localStorage.setItem(k, v); } catch {} } };
+function syncType(){
+  const t = (form.querySelector('input[name="type"]:checked') || {}).value;
+  $$("[data-for]", form).forEach(el => { el.hidden = el.dataset.for !== t; });
+}
+function openSuggest(type){
+  const p = current;
+  form.reset(); sgMsg.textContent = ""; sgMsg.className = "sg-msg";
+  form.hidden = false; $(".sg-done", dlg).hidden = true;
+  $("#sg-about").textContent = `About ${p.name}` + (p.parent ? ` · ${rel(p).toLowerCase()} of ${p.parent.name}` : "");
+  $("#sg-l-child").textContent = `A son or daughter of ${p.name}`;
+  $("#sg-l-spouse").textContent = p.spouse ? `A correction to ${p.name}'s spouse (${p.spouse})` : `${p.name}'s spouse`;
+  form.querySelector(`input[name="type"][value="${type}"]`).checked = true;
+  form.elements.from.value = store.get("gv-from");
+  syncType();
+  if (lenis) lenis.stop();
+  dlg.showModal();
+  const first = form.querySelector(`[data-for="${type}"] input, [data-for="${type}"] textarea`);
+  if (first) first.focus();
+}
+form.addEventListener("change", e => { if (e.target.name === "type") syncType(); });
+dlg.addEventListener("close", () => { if (lenis) lenis.start(); });
+$$(".sg-cancel, .sg-x", dlg).forEach(b => b.addEventListener("click", () => dlg.close()));
+dlg.addEventListener("click", e => { if (e.target === dlg) dlg.close(); });
+form.addEventListener("submit", async e => {
+  e.preventDefault();
+  const f = form.elements, type = (form.querySelector('input[name="type"]:checked') || {}).value;
+  const g = (form.querySelector('input[name="g"]:checked') || {}).value || "";
+  const body = {
+    type, personId: current.id, personName: current.name,
+    personPath: lineage(current).map(x => x.name).join(" › "),
+    name: f.name.value, g, gu: f.gu.value,
+    spouse: type === "spouse" ? f.spouse.value : f.childSpouse.value,
+    note: f.note.value, from: f.from.value, website: f.website.value
+  };
+  const need = type === "child" && !body.name.trim() ? "Please add the child's name."
+    : type === "child" && !g ? "Please choose son or daughter."
+    : type === "spouse" && !body.spouse.trim() ? "Please add the spouse's name."
+    : type === "other" && !body.note.trim() ? "Please write what should change."
+    : !body.from.trim() ? "Please add your name so Lay knows who sent it." : "";
+  if (need){ sgMsg.textContent = need; sgMsg.className = "sg-msg err"; return; }
+  const btn = form.querySelector('button[type="submit"]');
+  btn.disabled = true; sgMsg.className = "sg-msg"; sgMsg.textContent = "Sending…";
+  try {
+    const r = await fetch(API + "/suggest", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(j.error || "Something went wrong.");
+    store.set("gv-from", body.from.trim());
+    form.hidden = true; $(".sg-done", dlg).hidden = false; $(".sg-done button", dlg).focus();
+  } catch (err) {
+    sgMsg.textContent = (err.message && err.message !== "Failed to fetch") ? err.message : "Couldn't send right now. Please check your internet and try again.";
+    sgMsg.className = "sg-msg err";
+  } finally { btn.disabled = false; }
 });
 
 /* Directory */
