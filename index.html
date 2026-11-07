@@ -27,6 +27,8 @@
   --c-gold-soft:     rgba(227,169,75,.16);
   --c-vermilion:     #d65a3b;   /* kumkum accent                  */
   --c-leaf:          #86a36f;   /* leaf green accent              */
+  --c-son:           #e3a94b;   /* sons' circles (marigold)       */
+  --c-daughter:      #e98f86;   /* daughters' circles (rose)      */
   --c-branch:        #c9984f;   /* branch / connector lines       */
   --c-card:          #182019;   /* person card                    */
   --c-card-edge:     rgba(241,232,212,.10);
@@ -132,7 +134,7 @@ a{color:var(--c-gold)}
 .intro h2{font-size:clamp(2.4rem,6vw,5rem); letter-spacing:-.02em}
 .intro p{color:var(--c-ink-dim); font-size:1.08rem; max-width:46ch}
 .intro p + p{margin-top:1rem}
-.stats{display:grid; grid-template-columns:repeat(3,1fr); gap:1px; margin:clamp(60px,9vw,110px) 0 0; background:var(--c-card-edge); border-radius:var(--radius); overflow:hidden}
+.stats{display:grid; grid-template-columns:repeat(4,1fr); gap:1px; margin:clamp(60px,9vw,110px) 0 0; background:var(--c-card-edge); border-radius:var(--radius); overflow:hidden}
 .stats div{background:var(--c-bg); padding:28px 24px}
 .stats dt{font-size:.75rem; letter-spacing:.2em; text-transform:uppercase; color:var(--c-ink-dim)}
 .stats dd{margin:.4rem 0 0; font-family:"Fraunces",serif; font-size:clamp(2.6rem,6vw,4.6rem); line-height:1; color:var(--c-gold)}
@@ -153,7 +155,13 @@ a{color:var(--c-gold)}
 .zoom button:disabled{opacity:.35; cursor:default}
 #glance-svg .g-sp{fill:var(--c-ink-dim); stroke:var(--c-bg-2); font:italic 400 11.5px "Fraunces",serif}
 #glance-svg .g-node.item text{font-size:12.5px}
-#glance-svg .g-node.wed circle{stroke:var(--c-vermilion)}
+#glance-svg .g-node.f circle{stroke:var(--c-daughter)}
+#glance-svg .g-node.f:hover circle{fill:var(--c-daughter)}
+.legend{display:flex; gap:14px; font-size:.8rem; color:var(--c-ink-dim)}
+.legend span{display:inline-flex; align-items:center; gap:6px}
+.legend i{width:10px; height:10px; border-radius:50%; border:2px solid var(--c-son)}
+.legend i.f{border-color:var(--c-daughter)}
+.kid-meta .rel{display:block; color:var(--c-ink-dim); margin-bottom:2px}
 #glance-svg .g-link{fill:none; stroke:var(--c-branch); stroke-width:1.4; opacity:.75}
 #glance-svg .g-node circle{fill:var(--c-bg-2); stroke:var(--c-gold); stroke-width:2}
 #glance-svg .g-node.root circle{fill:var(--c-gold)}
@@ -211,7 +219,8 @@ a{color:var(--c-gold)}
   width:clamp(104px,14vw,136px); aspect-ratio:1; border-radius:50%; display:grid; place-items:center;
   font-family:"Fraunces",serif; font-style:italic; font-size:clamp(2.6rem,5vw,3.4rem); line-height:1;
 }
-.ring.self{background:radial-gradient(circle at 35% 30%, #f6c672, var(--c-gold) 55%, #b97a24); color:#24170a; box-shadow:0 0 0 8px var(--c-gold-soft), 0 24px 60px -18px rgba(227,169,75,.7); z-index:2}
+.ring.self{background:radial-gradient(circle at 35% 30%, #f6c672, var(--c-son) 55%, #b97a24); color:#24170a; box-shadow:0 0 0 8px var(--c-gold-soft), 0 24px 60px -18px rgba(227,169,75,.7); z-index:2}
+.ring.self.f{background:radial-gradient(circle at 35% 30%, #f9c3b9, var(--c-daughter) 55%, #b45d55); color:#2a1210; box-shadow:0 0 0 8px rgba(233,143,134,.16), 0 24px 60px -18px rgba(233,143,134,.65)}
 .ring.partner{
   margin-left:-30px; background:var(--c-card); border:2px solid var(--c-vermilion); color:var(--c-vermilion);
   width:clamp(84px,11vw,108px); font-size:clamp(2rem,4vw,2.6rem); z-index:1;
@@ -258,6 +267,7 @@ a{color:var(--c-gold)}
 .kid:hover{transform:translateY(-4px); background:var(--c-card-hover); border-color:rgba(227,169,75,.45); box-shadow:0 18px 40px -20px rgba(0,0,0,.8)}
 .kid:active{transform:translateY(-1px) scale(.98)}
 .kid-pair{display:flex; align-items:center; margin-bottom:6px}
+.kid-ring.f{background:radial-gradient(circle at 35% 30%, #f9c3b9, var(--c-daughter) 60%, #b45d55) !important; color:#2a1210 !important}
 .kid-ring{width:52px; aspect-ratio:1; border-radius:50%; display:grid; place-items:center; background:radial-gradient(circle at 35% 30%, #f6c672, var(--c-gold) 60%, #b97a24); color:#24170a; font-family:"Fraunces",serif; font-style:italic; font-size:1.5rem; z-index:1}
 .kid-partner{width:34px; aspect-ratio:1; border-radius:50%; margin-left:-12px; border:1.5px solid var(--c-vermilion); background:var(--c-card)}
 .kid-partner.empty{border-style:dashed; border-color:rgba(241,232,212,.3)}
@@ -292,7 +302,7 @@ footer .gu{font-family:"Noto Serif Gujarati",serif; color:var(--c-gold)}
 /* ---------------- Responsive ---------------- */
 @media (max-width: 860px){
   .intro-grid{grid-template-columns:1fr}
-  .stats{grid-template-columns:1fr 1fr 1fr}
+  .stats{grid-template-columns:1fr 1fr}
   .stats div{padding:20px 14px}
   /* phones: one column hanging off a vertical trunk */
   .kids, .kids.many{grid-template-columns:1fr; gap:12px; margin-top:56px; padding-left:38px; max-width:none}
@@ -351,12 +361,14 @@ footer .gu{font-family:"Noto Serif Gujarati",serif; color:var(--c-gold)}
       <div data-reveal>
         <p>A banyan starts from one seed. Then it lets roots down from its own branches until a single tree becomes a whole grove.</p>
         <p>Ours began with Govindji. This is a living record of everyone who grew from him: who belongs to which branch, and who they married. It keeps growing as names are added.</p>
+        <p>Spouses appear beside the person they married, but they aren't counted as family members or descendants: every count on this page is blood lineage only.</p>
       </div>
     </div>
     <dl class="stats" data-reveal>
       <div><dt>Generations</dt><dd id="stat-gens">7</dd></div>
-      <div><dt>Names so far</dt><dd id="stat-people">50</dd></div>
-      <div><dt>Root</dt><dd>1</dd></div>
+      <div><dt>Family members</dt><dd id="stat-people">90</dd></div>
+      <div><dt>Sons</dt><dd id="stat-sons">0</dd></div>
+      <div><dt>Daughters</dt><dd id="stat-daughters">0</dd></div>
     </dl>
   </div>
 </section>
@@ -370,6 +382,7 @@ footer .gu{font-family:"Noto Serif Gujarati",serif; color:var(--c-gold)}
         <h2 id="glance-h">The whole vansh, <em>root to leaf</em></h2>
       </div>
       <div class="glance-tools">
+        <p class="legend" aria-hidden="true"><span><i></i>Son</span><span><i class="f"></i>Daughter</span></p>
         <p class="glance-gen" aria-hidden="true">Generation <span id="glance-gen-n">VII</span></p>
         <div class="zoom" role="group" aria-label="Zoom the tree">
           <button type="button" id="zoom-out" aria-label="Zoom out">−</button>
@@ -442,6 +455,7 @@ footer .gu{font-family:"Noto Serif Gujarati",serif; color:var(--c-gold)}
    THE FAMILY
    ---------------------------------------------------------------------
    name      English name (required)
+   g         "m" for male, "f" for female
    gu        Gujarati name, shown under the English one
    spouse    spouse's name
    place     place shown on the card (placeGu = Gujarati spelling)
@@ -449,113 +463,113 @@ footer .gu{font-family:"Noto Serif Gujarati",serif; color:var(--c-gold)}
    unknown   true = this branch's details are still being gathered
    ===================================================================== */
 const FAMILY =
-{ name: "Govindji", children: [
-  { name: "Nagarji", children: [
-    { name: "Dullabhbhai", children: [
-      { name: "Ranchhodji", gu: "રણછોડજી", children: [
-        { name: "Rameshbhai", gu: "રમેશભાઈ", children: [
-          { name: "Kartik", gu: "કાર્તિક", children: [
-            { name: "Aaryan", gu: "આર્યન" }
+{ name: "Govindji", g: "m", children: [
+  { name: "Nagarji", g: "m", children: [
+    { name: "Dullabhbhai", g: "m", children: [
+      { name: "Ranchhodji", g: "m", gu: "રણછોડજી", children: [
+        { name: "Rameshbhai", g: "m", gu: "રમેશભાઈ", children: [
+          { name: "Kartik", g: "m", gu: "કાર્તિક", children: [
+            { name: "Aaryan", g: "m", gu: "આર્યન" }
           ]}
         ]}
       ]}
     ]},
-    { name: "Bhimbhai", gu: "ભીમભાઈ", children: [
-      { name: "Maganbhai", gu: "મગનભાઈ", children: [
-        { name: "Ranjeet", children: [
-          { name: "Niraj", gu: "નિરજ", children: [
-            { name: "Durva", gu: "દુર્વા" }
+    { name: "Bhimbhai", g: "m", gu: "ભીમભાઈ", children: [
+      { name: "Maganbhai", g: "m", gu: "મગનભાઈ", children: [
+        { name: "Ranjeet", g: "m", children: [
+          { name: "Niraj", g: "m", gu: "નિરજ", children: [
+            { name: "Durva", g: "f", gu: "દુર્વા" }
           ]}
         ]}
       ]},
-      { name: "Kamuben", gu: "કમૂબેન" },
-      { name: "Khedubhai", gu: "ખેડુભાઈ", children: [
-        { name: "Sureshbhai", gu: "સુરેશભાઈ", children: [
-          { name: "Ankur", children: [ { name: "Isha" } ]},
-          { name: "Jaymal", children: [ { name: "Hiyan" } ]}
+      { name: "Kamuben", g: "f", gu: "કમૂબેન" },
+      { name: "Khedubhai", g: "m", gu: "ખેડુભાઈ", children: [
+        { name: "Sureshbhai", g: "m", gu: "સુરેશભાઈ", children: [
+          { name: "Ankur", g: "m", children: [ { name: "Isha", g: "f" } ]},
+          { name: "Jaymal", g: "m", children: [ { name: "Hiyan", g: "m" } ]}
         ]},
-        { name: "Geetaben", gu: "ગીતાબેન", children: [ { name: "Apurva" } ]},
-        { name: "Bharatbhai", gu: "ભરતભાઈ", children: [ { name: "Chirag" } ]},
-        { name: "Minakshiben", gu: "મીનાક્ષી", unknown: true },
-        { name: "Ashokbhai", gu: "અશોકભાઈ", children: [
-          { name: "Smit" },
-          { name: "Richi" }
+        { name: "Geetaben", g: "f", gu: "ગીતાબેન", children: [ { name: "Apurva", g: "m" } ]},
+        { name: "Bharatbhai", g: "m", gu: "ભરતભાઈ", children: [ { name: "Chirag", g: "m" } ]},
+        { name: "Minakshiben", g: "f", gu: "મીનાક્ષી", unknown: true },
+        { name: "Ashokbhai", g: "m", gu: "અશોકભાઈ", children: [
+          { name: "Smit", g: "m" },
+          { name: "Richi", g: "m" }
         ]}
       ]}
     ]},
-    { name: "Bhagwanji", gu: "ભગવાનજી", spouse: "Sharadaben", children: [
-      { name: "Mahendrabhai", gu: "મહેન્દ્ર", unknown: true },
-      { name: "Anilbhai", gu: "અનિલ", spouse: "Kumudben", children: [
-        { name: "Keyur", gu: "કેયૂર", spouse: "Purvi", children: [ { name: "Lay", gu: "લય" } ]},
-        { name: "Uday", gu: "ઉદય", spouse: "Mitalben", children: [
-          { name: "Jahan" },
-          { name: "Hard" }
+    { name: "Bhagwanji", g: "m", gu: "ભગવાનજી", spouse: "Sharadaben", children: [
+      { name: "Mahendrabhai", g: "m", gu: "મહેન્દ્ર", unknown: true },
+      { name: "Anilbhai", g: "m", gu: "અનિલ", spouse: "Kumudben", children: [
+        { name: "Keyur", g: "m", gu: "કેયૂર", spouse: "Purvi", children: [ { name: "Lay", g: "m", gu: "લય" } ]},
+        { name: "Uday", g: "m", gu: "ઉદય", spouse: "Mitalben", children: [
+          { name: "Jahan", g: "m" },
+          { name: "Hard", g: "m" }
         ]},
-        { name: "Nipa", spouse: "Nileshbhai", children: [ { name: "Aatmi", gu: "આત્મી" } ]}
+        { name: "Nipa", g: "f", spouse: "Nileshbhai", children: [ { name: "Aatmi", g: "f", gu: "આત્મી" } ]}
       ]},
-      { name: "Harshaben", spouse: "Manharbhai", children: [
-        { name: "Paresh", spouse: "Manisha", children: [ { name: "Shrey" } ]},
-        { name: "Nayan", spouse: "Roshni", children: [ { name: "Jal", spouse: "Tulsi" } ]}
+      { name: "Harshaben", g: "f", spouse: "Manharbhai", children: [
+        { name: "Paresh", g: "m", spouse: "Manisha", children: [ { name: "Shrey", g: "m" } ]},
+        { name: "Nayan", g: "m", spouse: "Roshni", children: [ { name: "Jal", g: "m", spouse: "Tulsi" } ]}
       ]},
-      { name: "Vinodbhai", spouse: "Shilaben", children: [
-        { name: "Tejas", spouse: "Sapna", children: [
-          { name: "Dweep" },
-          { name: "Ved" }
+      { name: "Vinodbhai", g: "m", spouse: "Shilaben", children: [
+        { name: "Tejas", g: "m", spouse: "Sapna", children: [
+          { name: "Dweep", g: "m" },
+          { name: "Ved", g: "m" }
         ]},
-        { name: "Neha", children: [ { name: "Purv" } ]}
+        { name: "Neha", g: "f", children: [ { name: "Purv", g: "m" } ]}
       ]},
-      { name: "Vasuben", spouse: "Harshadbhai", children: [
-        { name: "Jigna", spouse: "Keyur", children: [
-          { name: "Sawni" },
-          { name: "Jash" }
+      { name: "Vasuben", g: "f", spouse: "Harshadbhai", children: [
+        { name: "Jigna", g: "f", spouse: "Keyur", children: [
+          { name: "Sawni", g: "f" },
+          { name: "Jash", g: "m" }
         ]},
-        { name: "Ketal", spouse: "Rakesh", children: [
-          { name: "Krina" },
-          { name: "Dhrumit" }
+        { name: "Ketal", g: "f", spouse: "Rakesh", children: [
+          { name: "Krina", g: "f" },
+          { name: "Dhrumit", g: "m" }
         ]},
-        { name: "Shital", spouse: "Pratik", children: [ { name: "Ish" } ]}
+        { name: "Shital", g: "f", spouse: "Pratik", children: [ { name: "Ish", g: "m" } ]}
       ]}
     ]},
-    { name: "Dayalji", unknown: true },
-    { name: "Manchhaben", gu: "મંછાબેન", place: "Amalsad", children: [
-      { name: "Bhimbhai", gu: "ભીમભાઈ", children: [
-        { name: "Babu", gu: "બાબુ" },
-        { name: "Suman", gu: "સુમન" },
-        { name: "Ravindra", gu: "રવિન્દ્ર" },
-        { name: "Jayesh", gu: "જયેશ" },
-        { name: "Niru", gu: "નીરુ" },
-        { name: "Manju", gu: "મંજુ" }
+    { name: "Dayalji", g: "m", unknown: true },
+    { name: "Manchhaben", g: "f", gu: "મંછાબેન", place: "Amalsad", children: [
+      { name: "Bhimbhai", g: "m", gu: "ભીમભાઈ", children: [
+        { name: "Babu", g: "m", gu: "બાબુ" },
+        { name: "Suman", g: "m", gu: "સુમન" },
+        { name: "Ravindra", g: "m", gu: "રવિન્દ્ર" },
+        { name: "Jayesh", g: "m", gu: "જયેશ" },
+        { name: "Niru", g: "f", gu: "નીરુ" },
+        { name: "Manju", g: "f", gu: "મંજુ" }
       ]},
-      { name: "Maganbhai", gu: "મગનભાઈ", children: [
-        { name: "Somabhai", gu: "સોમાભાઈ" },
-        { name: "Jatin" },
-        { name: "Pushpa", gu: "પુષ્પા" },
-        { name: "Panna", gu: "પન્ના" },
-        { name: "Kumud", gu: "કુમુદ" }
+      { name: "Maganbhai", g: "m", gu: "મગનભાઈ", children: [
+        { name: "Somabhai", g: "m", gu: "સોમાભાઈ" },
+        { name: "Jatin", g: "m" },
+        { name: "Pushpa", g: "f", gu: "પુષ્પા" },
+        { name: "Panna", g: "f", gu: "પન્ના" },
+        { name: "Kumud", g: "f", gu: "કુમુદ" }
       ]},
-      { name: "Bhagubhai" },
-      { name: "Chhotubhai", gu: "છોટુભાઈ" },
-      { name: "Dhirubhai", gu: "ધીરુભાઈ" },
-      { name: "Ramanbhai", gu: "રમણભાઈ", children: [
-        { name: "Bhavinbhai" },
-        { name: "Bhago", gu: "ભાગો" },
-        { name: "Divya", gu: "દિવ્યા" }
+      { name: "Bhagubhai", g: "m" },
+      { name: "Chhotubhai", g: "m", gu: "છોટુભાઈ" },
+      { name: "Dhirubhai", g: "m", gu: "ધીરુભાઈ" },
+      { name: "Ramanbhai", g: "m", gu: "રમણભાઈ", children: [
+        { name: "Bhavinbhai", g: "m" },
+        { name: "Bhago", g: "m", gu: "ભાગો" },
+        { name: "Divya", g: "f", gu: "દિવ્યા" }
       ]}
     ]},
-    { name: "Bhuliben", gu: "ભુલીબેન", place: "Vedchha", placeGu: "વેડછા", children: [
-      { name: "Bhanu", gu: "ભાનું", children: [
-        { name: "Jyoti", gu: "જ્યોતિ" },
-        { name: "Ila", gu: "ઈલા" }
+    { name: "Bhuliben", g: "f", gu: "ભુલીબેન", place: "Vedchha", placeGu: "વેડછા", children: [
+      { name: "Bhanu", g: "f", gu: "ભાનું", children: [
+        { name: "Jyoti", g: "f", gu: "જ્યોતિ" },
+        { name: "Ila", g: "f", gu: "ઈલા" }
       ]},
-      { name: "Hansa", gu: "હંસા" },
-      { name: "Veeru", children: [
-        { name: "Kokila", gu: "કોકિલા" },
-        { name: "Hemant", gu: "હેમંત" },
-        { name: "Bharat", gu: "ભરત" }
+      { name: "Hansa", g: "f", gu: "હંસા" },
+      { name: "Veeru", g: "f", children: [
+        { name: "Kokila", g: "f", gu: "કોકિલા" },
+        { name: "Hemant", g: "m", gu: "હેમંત" },
+        { name: "Bharat", g: "m", gu: "ભરત" }
       ]}
     ]},
-    { name: "Kashiben", gu: "કાશીબેન", place: "Sonawadi", placeGu: "સોનાવાડી" },
-    { name: "Gangaben", gu: "ગંગાબેન", place: "Sarbhan", placeGu: "સરભણ" }
+    { name: "Kashiben", g: "f", gu: "કાશીબેન", place: "Sonawadi", placeGu: "સોનાવાડી" },
+    { name: "Gangaben", g: "f", gu: "ગંગાબેન", place: "Sarbhan", placeGu: "સરભણ" }
   ]}
 ]};
 
@@ -600,7 +614,8 @@ const PIN = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 11.5S1.8 7.
 const nameCount = new Map();
 people.forEach(p => nameCount.set(p.name.toLowerCase(), (nameCount.get(p.name.toLowerCase()) || 0) + 1));
 const isDup = p => nameCount.get(p.name.toLowerCase()) > 1;
-const whoIs = p => p.parent ? `child of ${p.parent.name}` : "the root";
+const rel = p => p.g === "f" ? "Daughter" : p.g === "m" ? "Son" : "Child";
+const whoIs = p => p.parent ? `${rel(p).toLowerCase()} of ${p.parent.name}` : "the root";
 const lineage = p => { const a = []; for (let x = p; x; x = x.parent) a.unshift(x); return a; };
 const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
 function metaText(p){
@@ -611,6 +626,8 @@ function metaText(p){
 
 $("#stat-gens").textContent = byGen.length;
 $("#stat-people").textContent = people.size;
+$("#stat-sons").textContent = [...people.values()].filter(p => p.parent && p.g === "m").length;
+$("#stat-daughters").textContent = [...people.values()].filter(p => p.parent && p.g === "f").length;
 
 /* =====================================================================
    SMOOTH SCROLL (Lenis) + ScrollTrigger sync
@@ -789,7 +806,7 @@ if (HAS_GSAP){
         gsap.from(el, { opacity: 0, y: 50, duration: 1.1, ease: easeOut,
           scrollTrigger: { trigger: el, start: "top 85%", once: true } });
       });
-      ["#stat-gens", "#stat-people"].forEach(sel => {
+      ["#stat-gens", "#stat-people", "#stat-sons", "#stat-daughters"].forEach(sel => {
         const el = $(sel), target = parseInt(el.textContent, 10), o = { v: 0 };
         gsap.to(o, { v: target, duration: 1.6, ease: "power2.out", onUpdate: () => el.textContent = Math.round(o.v),
           scrollTrigger: { trigger: ".stats", start: "top 85%", once: true } });
@@ -910,7 +927,7 @@ if (HAS_GSAP){
   }));
   nodes.forEach(({ p, x, y, kind }) => {
     const g = document.createElementNS(NS, "g");
-    g.setAttribute("class", "g-node " + kind + (p.gen === 0 ? " root" : "") + (p.unknown ? " unknown" : "") + (p.spouse ? " wed" : ""));
+    g.setAttribute("class", "g-node " + kind + (p.gen === 0 ? " root" : "") + (p.unknown ? " unknown" : "") + (p.g === "f" ? " f" : ""));
     g.dataset.id = p.id;
     const label = escapeHTML(p.name);
     if (kind === "item"){
@@ -1047,13 +1064,13 @@ function renderStage(p){
     below = `<ul class="kids${p.children.length > 6 ? " many" : ""}" style="--n:${p.children.length}" aria-label="${escapeHTML(p.name)}'s children">` +
       p.children.map(k => `
         <li><button type="button" class="kid" data-id="${k.id}">
-          <span class="kid-pair" aria-hidden="true"><span class="kid-ring">${escapeHTML(initial(k))}</span><span class="kid-partner${k.spouse ? "" : " empty"}"></span></span>
+          <span class="kid-pair" aria-hidden="true"><span class="kid-ring ${k.g || ""}">${escapeHTML(initial(k))}</span><span class="kid-partner${k.spouse ? "" : " empty"}"></span></span>
           <span class="kid-text">
             <span class="kid-name">${escapeHTML(k.name)}</span>
             ${k.gu ? `<span class="kid-gu" lang="gu">${escapeHTML(k.gu)}</span>` : ""}
             ${k.place ? `<span class="kid-place">${PIN}<span class="sr-only">Place: </span>${escapeHTML(k.place)}</span>` : ""}
             <span class="kid-spouse${k.spouse ? " has" : ""}">${k.spouse ? "&amp; " + escapeHTML(k.spouse) : "&amp; spouse to be added"}</span>
-            <span class="kid-meta${k.unknown ? " unknown" : ""}">${metaText(k)}</span>
+            <span class="kid-meta${k.unknown ? " unknown" : ""}"><span class="rel">${rel(k)}</span>${metaText(k)}</span>
           </span>
         </button></li>`).join("") + `</ul>`;
   } else if (p.unknown){
@@ -1067,7 +1084,7 @@ function renderStage(p){
     <div class="up">${up}</div>
     <div class="focus">
       <div class="pair${p.spouse ? "" : " no-spouse"}" aria-hidden="true">
-        <span class="ring self">${escapeHTML(initial(p))}</span>
+        <span class="ring self ${p.g || ""}">${escapeHTML(initial(p))}</span>
         <span class="knot"></span>
         ${partner}
       </div>
@@ -1075,7 +1092,7 @@ function renderStage(p){
       <h3 id="focus-name" tabindex="-1">${escapeHTML(p.name)}</h3>
       ${p.gu ? `<p class="gu-name" lang="gu">${escapeHTML(p.gu)}</p>` : ""}
       ${spouseHTML(p)}
-      <p class="focus-meta">${p.parent ? `Child of ${escapeHTML(p.parent.name)} · ` : ""}${metaText(p)}</p>
+      <p class="focus-meta">${p.parent ? `${rel(p)} of ${escapeHTML(p.parent.name)} · ` : ""}${metaText(p)}</p>
       ${p.place ? `<p class="place">${PIN}<span class="sr-only">Place: </span>${escapeHTML(p.place)}${p.placeGu ? ` <span lang="gu">${escapeHTML(p.placeGu)}</span>` : ""}</p>` : ""}
     </div>
     ${below}`;
@@ -1275,7 +1292,7 @@ $("#finder").addEventListener("submit", e => {
 $("#gens").innerHTML = byGen.map((g, i) => `
   <div>
     <h3>Generation ${ROMAN[i]}</h3>
-    <ul>${g.map(p => `<li><button type="button" data-id="${p.id}">${escapeHTML(p.name)}${p.gu ? `<span class="gu" lang="gu">${escapeHTML(p.gu)}</span>` : ""}${p.parent ? `<span class="dup">child of ${escapeHTML(p.parent.name)}</span>` : ""}${p.unknown ? '<span class="unknown-dot" title="Details to be added"> · details to come</span>' : ""}</button></li>`).join("")}</ul>
+    <ul>${g.map(p => `<li><button type="button" data-id="${p.id}">${escapeHTML(p.name)}${p.gu ? `<span class="gu" lang="gu">${escapeHTML(p.gu)}</span>` : ""}${p.parent ? `<span class="dup">${escapeHTML(whoIs(p))}</span>` : ""}${p.unknown ? '<span class="unknown-dot" title="Details to be added"> · details to come</span>' : ""}</button></li>`).join("")}</ul>
   </div>`).join("");
 $("#gens").addEventListener("click", e => {
   const b = e.target.closest("button[data-id]");
