@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Naik Parivar, Kachholi — Our Family Tree</title>
-<meta name="description" content="The Naik family of Kachholi: generations grown from a single root, Ram. Open any branch to see the family that grew from it.">
+<meta name="description" content="The Naik family of Kachholi: generations grown from a single root, Rambhai. Open any branch to see the family that grew from it.">
 <!-- Shared by link only: ask search engines not to list this page -->
 <meta name="robots" content="noindex, nofollow, noarchive">
 <meta name="theme-color" content="#0e120f">
@@ -396,7 +396,7 @@ footer .gu{font-family:"Noto Serif Gujarati",serif; color:var(--c-gold)}
       <h2 id="intro-h" data-reveal>Every family is a <em>banyan.</em></h2>
       <div data-reveal>
         <p>A banyan starts from one seed. Then it lets roots down from its own branches until a single tree becomes a whole grove.</p>
-        <p>Ours began with Ram. Four generations later his line split between two brothers, Naran and Govindji, and both branches are here. This is a living record of everyone who grew from that root: who belongs to which branch, and who they married. It keeps growing as names are added.</p>
+        <p>Ours began with Rambhai. Four generations later his line split between two brothers, Naran and Govindji, and both branches are here. This is a living record of everyone who grew from that root: who belongs to which branch, and who they married. It keeps growing as names are added.</p>
         <p>Spouses appear beside the person they married, but they aren't counted as family members or descendants: every count on this page is blood lineage only.</p>
       </div>
     </div>
@@ -549,10 +549,10 @@ footer .gu{font-family:"Noto Serif Gujarati",serif; color:var(--c-gold)}
    noChildren true = confirmed: they have no children
    ===================================================================== */
 const FAMILY =
-{ name: "Ram", g: "m", gu: "રામ", children: [
-  { name: "Jethi", g: "m", gu: "જેઠી", children: [
-    { name: "Vagha", g: "m", gu: "વાઘા", children: [
-      { name: "Parshanji", g: "m", gu: "પરશાનજી", children: [
+{ name: "Rambhai", g: "m", gu: "રામ", children: [
+  { name: "Jogibhai", g: "m", gu: "જોગી", children: [
+    { name: "Vaghabhai", g: "m", gu: "વાઘા", children: [
+      { name: "Vasantjibhai", g: "m", gu: "વસંતજી", children: [
       { name: "Naran", g: "m", gu: "નારણ", children: [
         { name: "Ratan", g: "m", gu: "રતન", children: [
           { name: "Dahya", g: "m", gu: "ડાહ્યા", children: [
@@ -1120,7 +1120,7 @@ if (HAS_GSAP){
    GLANCE — the whole tree, drawn generation by generation as you scroll
    ===================================================================== */
 (function glance(){
-  /* Top-down tree: Ram at the top, one row per generation.
+  /* Top-down tree: Rambhai at the top, one row per generation.
      Brothers and sisters with no children of their own are stacked in a short
      list under their parent, which keeps the tree narrow enough to read. */
   const svg = $("#glance-svg"), box = $(".glance-scroll"), NS = "http://www.w3.org/2000/svg";
@@ -1324,7 +1324,8 @@ let busy = false;
 // links shared before some names were respelled keep working
 const OLD_IDS = { "nagar-ji":"nagarji", "bhagwan-ji":"bhagwanji", "durlabhbhai":"dullabhbhai", "ranchodji":"ranchhodji",
   "ranjitbhai":"ranjeet", "chutobhai":"chhotubhai", "khedubhai":"chhotubhai", "gitaben":"geetaben", "maherndrabhai":"mahendrabhai",
-  "nipaben":"nipa", "manchaben":"manchhaben", "bhargo":"bhago", "kokila":"kokilaben", "hemant":"hemantbhai", "bharat":"bharatbhai-2", "dharni":"dharani", "lataben":"ritaben" };
+  "nipaben":"nipa", "manchaben":"manchhaben", "bhargo":"bhago", "kokila":"kokilaben", "hemant":"hemantbhai", "bharat":"bharatbhai-2", "dharni":"dharani", "lataben":"ritaben",
+  "ram":"rambhai", "jethi":"jogibhai", "vagha":"vaghabhai", "parshanji":"vasantjibhai" };
 function personFromHash(){
   const m = location.hash.match(/^#\/([a-z0-9-]+)$/);
   if (!m) return null;
