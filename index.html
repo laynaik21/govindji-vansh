@@ -546,27 +546,33 @@ footer .gu{font-family:"Noto Serif Gujarati",serif; color:var(--c-gold)}
    place     place shown on the card (placeGu = Gujarati spelling)
    children  list of children, in order
    unknown   true = this branch's details are still being gathered
+   noChildren true = confirmed: they have no children
    ===================================================================== */
 const FAMILY =
 { name: "Govindji", g: "m", children: [
   { name: "Nagarji", g: "m", children: [
     { name: "Dullabhbhai", g: "m", children: [
       { name: "Ranchhodji", g: "m", gu: "રણછોડજી", children: [
-        { name: "Pushpaben", g: "f" },
+        { name: "Pushpaben", g: "f", spouse: "Thakorbhai", children: [
+          { name: "Hemlataben", g: "f" },
+          { name: "Surbhiben", g: "f" },
+          { name: "Lataben", g: "f" },
+          { name: "Sirishbhai", g: "m" }
+        ]},
         { name: "Rameshbhai", g: "m", gu: "રમેશભાઈ", spouse: "Ushaben", children: [
           { name: "Jagruti", g: "f", spouse: "Snehalbhai", children: [
             { name: "Pari", g: "f", spouse: "Priyank" },
             { name: "Aneri", g: "f" }
           ]},
           { name: "Purvita", g: "f", spouse: "Darshanbhai", children: [
-            { name: "Dharni", g: "f" }
+            { name: "Dharani", g: "f" }
           ]},
           { name: "Kartik", g: "m", gu: "કાર્તિક", spouse: "Namrata", children: [
             { name: "Aarchi", g: "f", spouse: "Vivek" },
             { name: "Aaryan", g: "m", gu: "આર્યન" }
           ]}
         ]},
-        { name: "Kusumben", g: "f" }
+        { name: "Kusumben", g: "f", spouse: "Hasmukhrai", noChildren: true }
       ]}
     ]},
     { name: "Bhimbhai", g: "m", gu: "ભીમભાઈ", children: [
@@ -759,6 +765,7 @@ const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
 function metaText(p){
   if (p.children.length) return `${plural(p.children.length, "branch", "branches")}` + (p.descendants > p.children.length ? ` · ${p.descendants} descendants` : "");
   if (p.unknown) return "Details to be added";
+  if (p.noChildren) return "No children";
   return "No branches yet";
 }
 
@@ -1166,7 +1173,7 @@ let busy = false;
 // links shared before some names were respelled keep working
 const OLD_IDS = { "nagar-ji":"nagarji", "bhagwan-ji":"bhagwanji", "durlabhbhai":"dullabhbhai", "ranchodji":"ranchhodji",
   "ranjitbhai":"ranjeet", "chutobhai":"chhotubhai", "khedubhai":"chhotubhai", "gitaben":"geetaben", "maherndrabhai":"mahendrabhai",
-  "nipaben":"nipa", "manchaben":"manchhaben", "bhargo":"bhago", "kokila":"kokilaben", "hemant":"hemantbhai", "bharat":"bharatbhai-2" };
+  "nipaben":"nipa", "manchaben":"manchhaben", "bhargo":"bhago", "kokila":"kokilaben", "hemant":"hemantbhai", "bharat":"bharatbhai-2", "dharni":"dharani" };
 function personFromHash(){
   const m = location.hash.match(/^#\/([a-z0-9-]+)$/);
   if (!m) return null;
@@ -1211,6 +1218,8 @@ function renderStage(p){
             <span class="kid-meta${k.unknown ? " unknown" : ""}"><span class="rel">${rel(k)}</span>${metaText(k)}</span>
           </span>
         </button></li>`).join("") + `</ul>`;
+  } else if (p.noChildren){
+    below = `<p class="branch-note"><strong>No children</strong>${escapeHTML(p.name)}${p.spouse ? ` and ${escapeHTML(p.spouse)}` : ""} have no children.</p>`;
   } else if (p.unknown){
     below = `<p class="branch-note"><strong>This branch is still being traced</strong>The details of ${escapeHTML(p.name)}'s family haven't been gathered yet. If you know them, tell Lay and they'll be added here.</p>`;
   } else {
