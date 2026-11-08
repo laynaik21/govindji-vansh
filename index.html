@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Govindji's Vansh — Our Family Tree</title>
-<meta name="description" content="The family tree of Govindji: seven generations grown from a single root. Open any branch to see the family that grew from it.">
+<title>Naik Parivar, Kachholi — Our Family Tree</title>
+<meta name="description" content="The Naik family of Kachholi: generations grown from a single root, Ram. Open any branch to see the family that grew from it.">
 <!-- Shared by link only: ask search engines not to list this page -->
 <meta name="robots" content="noindex, nofollow, noarchive">
 <meta name="theme-color" content="#0e120f">
@@ -377,12 +377,12 @@ footer .gu{font-family:"Noto Serif Gujarati",serif; color:var(--c-gold)}
     <svg data-speed="0.9" style="right:14%;bottom:18%;width:130px" viewBox="0 0 100 100"><path d="M50 5c25 20 25 70 0 90-25-20-25-70 0-90zM50 5v90M50 40l-14-10M50 55l16-12M50 70l-14-10"/></svg>
   </div>
   <div class="hero-inner">
-    <p class="eyebrow" lang="gu">ગોવિંદજીનો વંશ</p>
-    <h1 class="hero-title" aria-label="Govindji's Vansh">
-      <span class="line" aria-hidden="true"><span>Govindji's</span></span>
-      <span class="line" aria-hidden="true"><span><em>Vansh</em></span></span>
+    <p class="eyebrow" lang="gu">નાયક પરિવાર · કછોલી</p>
+    <h1 class="hero-title" aria-label="Naik Parivar, Kachholi">
+      <span class="line" aria-hidden="true"><span>Naik</span></span>
+      <span class="line" aria-hidden="true"><span><em>Parivar</em></span></span>
     </h1>
-    <p class="hero-sub">Seven generations grown from a single root. Open any branch and the family that grew from it unfolds.</p>
+    <p class="hero-sub"><span id="gen-words">Eleven</span> generations of Kachholi's Naik family, grown from a single root. Open any branch and the family that grew from it unfolds.</p>
     <a class="btn" href="#explore">Walk the tree <span aria-hidden="true">↓</span></a>
   </div>
   <div class="scroll-cue" aria-hidden="true">Scroll<i></i></div>
@@ -396,7 +396,7 @@ footer .gu{font-family:"Noto Serif Gujarati",serif; color:var(--c-gold)}
       <h2 id="intro-h" data-reveal>Every family is a <em>banyan.</em></h2>
       <div data-reveal>
         <p>A banyan starts from one seed. Then it lets roots down from its own branches until a single tree becomes a whole grove.</p>
-        <p>Ours began with Govindji. This is a living record of everyone who grew from him: who belongs to which branch, and who they married. It keeps growing as names are added.</p>
+        <p>Ours began with Ram. Four generations later his line split between two brothers, Naran and Govindji, and both branches are here. This is a living record of everyone who grew from that root: who belongs to which branch, and who they married. It keeps growing as names are added.</p>
         <p>Spouses appear beside the person they married, but they aren't counted as family members or descendants: every count on this page is blood lineage only.</p>
       </div>
     </div>
@@ -526,7 +526,7 @@ footer .gu{font-family:"Noto Serif Gujarati",serif; color:var(--c-gold)}
 
 <footer>
   <div class="wrap">
-    <p><span class="gu" lang="gu">ગોવિંદજીનો વંશ</span> · Govindji's Vansh</p>
+    <p><span class="gu" lang="gu">નાયક પરિવાર, કછોલી</span> · Naik Parivar, Kachholi</p>
     <p>Know a missing name or a spouse's name? Tell Lay and the tree will grow.</p>
   </div>
 </footer>
@@ -549,137 +549,275 @@ footer .gu{font-family:"Noto Serif Gujarati",serif; color:var(--c-gold)}
    noChildren true = confirmed: they have no children
    ===================================================================== */
 const FAMILY =
-{ name: "Govindji", g: "m", children: [
-  { name: "Nagarji", g: "m", children: [
-    { name: "Dullabhbhai", g: "m", children: [
-      { name: "Ranchhodji", g: "m", gu: "રણછોડજી", children: [
-        { name: "Pushpaben", g: "f", spouse: "Thakorbhai", children: [
-          { name: "Hemlataben", g: "f" },
-          { name: "Surbhiben", g: "f" },
-          { name: "Ritaben", g: "f" },
-          { name: "Sirishbhai", g: "m" }
-        ]},
-        { name: "Rameshbhai", g: "m", gu: "રમેશભાઈ", spouse: "Ushaben", children: [
-          { name: "Jagruti", g: "f", spouse: "Snehalbhai", children: [
-            { name: "Pari", g: "f", spouse: "Priyank" },
-            { name: "Aneri", g: "f" }
-          ]},
-          { name: "Purvita", g: "f", spouse: "Darshanbhai", children: [
-            { name: "Dharani", g: "f" }
-          ]},
-          { name: "Kartik", g: "m", gu: "કાર્તિક", spouse: "Namrata", children: [
-            { name: "Aarchi", g: "f", spouse: "Vivek" },
-            { name: "Aaryan", g: "m", gu: "આર્યન" }
+{ name: "Ram", g: "m", gu: "રામ", children: [
+  { name: "Jethi", g: "m", gu: "જેઠી", children: [
+    { name: "Vagha", g: "m", gu: "વાઘા", children: [
+      { name: "Parshanji", g: "m", gu: "પરશાનજી", children: [
+      { name: "Naran", g: "m", gu: "નારણ", children: [
+        { name: "Ratan", g: "m", gu: "રતન", children: [
+          { name: "Dahya", g: "m", gu: "ડાહ્યા", children: [
+            { name: "Amba", g: "m", gu: "અંબા", children: [
+              { name: "Nanu", g: "m", gu: "નાનુ", children: [
+                { name: "Arvind", g: "m", gu: "અરવિંદ", children: [
+                  { name: "Harit", g: "m", gu: "હરિત", children: [
+                    { name: "Shivam", g: "m", gu: "શિવમ" },
+                    { name: "Ayan", g: "m", gu: "અયાન" }
+                  ]}
+                ]},
+                { name: "Anil", g: "m", gu: "અનિલ", children: [
+                  { name: "Kaitav", g: "m", gu: "કૈતવ", children: [
+                    { name: "Mahini", g: "f", gu: "માહિની" }
+                  ]}
+                ]},
+                { name: "Piyush", g: "m", gu: "પિયુષ", children: [
+                  { name: "Kunal", g: "m", gu: "કુણાલ", children: [
+                    { name: "Akshil", g: "m", gu: "અક્ષિલ" }
+                  ]}
+                ]}
+              ]},
+              { name: "Magan", g: "m", gu: "મગન" }
+            ]},
+            { name: "Rama", g: "m", gu: "રામા", children: [
+              { name: "Pintu", g: "m", gu: "પીંટુ" },
+              { name: "Mogha", g: "m", gu: "મોઘા", children: [
+                { name: "Ishwar", g: "m", gu: "ઈશ્વર", children: [
+                  { name: "Pinal", g: "m", gu: "પીનલ", children: [
+                    { name: "Dev", g: "m", gu: "દેવ" }
+                  ]}
+                ]},
+                { name: "Kishor", g: "m", gu: "કિશોર", children: [
+                  { name: "Herit", g: "m", gu: "હેરિત" },
+                  { name: "Harshit", g: "m", gu: "હર્ષિત" }
+                ]}
+              ]}
+            ]}
           ]}
         ]},
-        { name: "Kusumben", g: "f", spouse: "Hasmukhrai", noChildren: true }
-      ]}
-    ]},
-    { name: "Bhimbhai", g: "m", gu: "ભીમભાઈ", children: [
-      { name: "Maganbhai", g: "m", gu: "મગનભાઈ", children: [
-        { name: "Ranjeet", g: "m", children: [
-          { name: "Niraj", g: "m", gu: "નિરજ", children: [
-            { name: "Durva", g: "f", gu: "દુર્વા" }
+        { name: "Kunvar", g: "m", gu: "કુંવર", children: [
+          { name: "Gulab", g: "m", gu: "ગુલાબ", children: [
+            { name: "Kiku", g: "m", gu: "કીકુ" }
+          ]},
+          { name: "Dahya", g: "m", gu: "ડાહ્યા", children: [
+            { name: "Parshan", g: "m", gu: "પરશાન" }
+          ]},
+          { name: "Parsha", g: "m", gu: "પરશા", children: [
+            { name: "Laliben", g: "f", gu: "લાલીબેન", children: [
+              { name: "Nimesh", g: "m", gu: "નિમેષ" }
+            ]}
+          ]},
+          { name: "Lallu", g: "m", gu: "લલ્લુ" }
+        ]},
+        { name: "Nathu", g: "m", gu: "નાથ્થુ", children: [
+          { name: "Kala", g: "m", gu: "કાળા", children: [
+            { name: "Nagji", g: "m", gu: "નાગજી", children: [
+              { name: "Kirit", g: "m", gu: "કિરીટ", children: [
+                { name: "Nilam", g: "m", gu: "નિલમ", children: [
+                  { name: "Pinku", g: "m", gu: "પિંકુ" }
+                ]},
+                { name: "Jagdish", g: "m", gu: "જગદીશ" }
+              ]},
+              { name: "Nutan", g: "m", gu: "નૂતન", children: [
+                { name: "Mihir", g: "m", gu: "મિહિર", children: [
+                  { name: "Vihant", g: "m", gu: "વિહાંત" }
+                ]}
+              ]}
+            ]},
+            { name: "Dilan", g: "m", gu: "દીલન", children: [
+              { name: "Vinod", g: "m", gu: "વિનોદ", children: [
+                { name: "Komal", g: "f", gu: "કોમલ (માયાબેન)", children: [
+                  { name: "Priyanshu", g: "m", gu: "પ્રિયાંશુ" }
+                ]}
+              ]},
+              { name: "Bharat", g: "m", gu: "ભરત", children: [
+                { name: "Himansh", g: "m", gu: "હિમાંશ", children: [
+                  { name: "Rivaan", g: "m", gu: "રિવાન" }
+                ]}
+              ]}
+            ]}
+          ]},
+          { name: "Naran", g: "m", gu: "નારણ", children: [
+            { name: "Raman", g: "m", gu: "રમણ" },
+            { name: "Thakor", g: "m", gu: "ઠાકોર" }
+          ]}
+        ]},
+        { name: "Lallu", g: "m", gu: "લલ્લુ", children: [
+          { name: "Kalyan", g: "m", gu: "કલ્યાણ", children: [
+            { name: "Ballu", g: "m", gu: "બલ્લુ", children: [
+              { name: "Manoj", g: "m", gu: "મનોજ" },
+              { name: "Janak", g: "m", gu: "જનક" }
+            ]},
+            { name: "Dhiru", g: "m", gu: "ધીરુ" },
+            { name: "Raman", g: "m", gu: "રમણ" },
+            { name: "Bachu", g: "m", gu: "બચુ" },
+            { name: "Manu", g: "m", gu: "મનુ" }
+          ]}
+        ]},
+        { name: "Gopal", g: "m", gu: "ગોપાળ", children: [
+          { name: "Gulab", g: "m", gu: "ગુલાબ", children: [
+            { name: "Ranchhod", g: "m", gu: "રણછોડ", children: [
+              { name: "Parimal", g: "m", gu: "પરિમલ", children: [
+                { name: "Bhumi", g: "f", gu: "ભૂમિ" }
+              ]}
+            ]},
+            { name: "Soman", g: "m", gu: "સોમન", children: [
+              { name: "Taral", g: "m", gu: "તરલ", children: [
+                { name: "Jatan", g: "m", gu: "જતન" }
+              ]},
+              { name: "Prashant", g: "m", gu: "પ્રશાંત" }
+            ]},
+            { name: "Thakor", g: "m", gu: "ઠાકોર" },
+            { name: "Natu", g: "m", gu: "નટુ" }
+          ]}
+        ]},
+        { name: "Makan", g: "m", gu: "મકન", children: [
+          { name: "Bhoma", g: "m", gu: "ભોમા", children: [
+            { name: "Dilan", g: "m", gu: "દીલન", children: [
+              { name: "Satish", g: "m", gu: "સતીશ" }
+            ]}
           ]}
         ]}
       ]},
-      { name: "Kamuben", g: "f", gu: "કમૂબેન" },
-      { name: "Chhotubhai", g: "m", gu: "છોટુભાઈ", children: [
-        { name: "Sureshbhai", g: "m", gu: "સુરેશભાઈ", children: [
-          { name: "Ankur", g: "m", children: [ { name: "Isha", g: "f" } ]},
-          { name: "Jaymal", g: "m", children: [ { name: "Hiyan", g: "m" } ]}
-        ]},
-        { name: "Geetaben", g: "f", gu: "ગીતાબેન", children: [ { name: "Apurva", g: "m" } ]},
-        { name: "Bharatbhai", g: "m", gu: "ભરતભાઈ", children: [ { name: "Chirag", g: "m" } ]},
-        { name: "Minakshiben", g: "f", gu: "મીનાક્ષી", unknown: true },
-        { name: "Ashokbhai", g: "m", gu: "અશોકભાઈ", children: [
-          { name: "Smit", g: "m" },
-          { name: "Richi", g: "m" }
-        ]}
-      ]}
-    ]},
-    { name: "Bhagwanji", g: "m", gu: "ભગવાનજી", spouse: "Sharadaben", children: [
-      { name: "Mahendrabhai", g: "m", gu: "મહેન્દ્ર", unknown: true },
-      { name: "Anilbhai", g: "m", gu: "અનિલ", spouse: "Kumudben", children: [
-        { name: "Keyur", g: "m", gu: "કેયૂર", spouse: "Purvi", children: [ { name: "Lay", g: "m", gu: "લય" } ]},
-        { name: "Uday", g: "m", gu: "ઉદય", spouse: "Mitalben", children: [
-          { name: "Jahan", g: "m" },
-          { name: "Hard", g: "m" }
-        ]},
-        { name: "Nipa", g: "f", spouse: "Nileshbhai", children: [ { name: "Aatmi", g: "f", gu: "આત્મી" } ]}
-      ]},
-      { name: "Harshaben", g: "f", spouse: "Manharbhai", children: [
-        { name: "Paresh", g: "m", spouse: "Manisha", children: [ { name: "Shrey", g: "m" } ]},
-        { name: "Nayan", g: "m", spouse: "Roshni", children: [ { name: "Jal", g: "m", spouse: "Tulsi" } ]}
-      ]},
-      { name: "Vinodbhai", g: "m", spouse: "Shilaben", children: [
-        { name: "Tejas", g: "m", spouse: "Sapna", children: [
-          { name: "Dweep", g: "m" },
-          { name: "Ved", g: "m" }
-        ]},
-        { name: "Neha", g: "f", children: [ { name: "Purv", g: "m" } ]}
-      ]},
-      { name: "Vasuben", g: "f", spouse: "Harshadbhai", children: [
-        { name: "Jigna", g: "f", spouse: "Keyur", children: [
-          { name: "Sawni", g: "f" },
-          { name: "Jash", g: "m" }
-        ]},
-        { name: "Ketal", g: "f", spouse: "Rakesh", children: [
-          { name: "Krina", g: "f" },
-          { name: "Dhrumit", g: "m" }
-        ]},
-        { name: "Shital", g: "f", spouse: "Pratik", children: [ { name: "Ish", g: "m" } ]}
-      ]}
-    ]},
-    { name: "Dayalji", g: "m", unknown: true },
-    { name: "Manchhaben", g: "f", gu: "મંછાબેન", place: "Amalsad", children: [
-      { name: "Bhimbhai", g: "m", gu: "ભીમભાઈ", children: [
-        { name: "Babu", g: "m", gu: "બાબુ" },
-        { name: "Suman", g: "m", gu: "સુમન" },
-        { name: "Ravindra", g: "m", gu: "રવિન્દ્ર" },
-        { name: "Jayesh", g: "m", gu: "જયેશ" },
-        { name: "Niru", g: "f", gu: "નીરુ" },
-        { name: "Manju", g: "f", gu: "મંજુ" }
-      ]},
-      { name: "Maganbhai", g: "m", gu: "મગનભાઈ", children: [
-        { name: "Somabhai", g: "m", gu: "સોમાભાઈ" },
-        { name: "Jatin", g: "m" },
-        { name: "Pushpa", g: "f", gu: "પુષ્પા" },
-        { name: "Panna", g: "f", gu: "પન્ના" },
-        { name: "Kumud", g: "f", gu: "કુમુદ" }
-      ]},
-      { name: "Bhagubhai", g: "m" },
-      { name: "Chhotubhai", g: "m", gu: "છોટુભાઈ" },
-      { name: "Dhirubhai", g: "m", gu: "ધીરુભાઈ" },
-      { name: "Ramanbhai", g: "m", gu: "રમણભાઈ", children: [
-        { name: "Bhavinbhai", g: "m" },
-        { name: "Bhago", g: "m", gu: "ભાગો" },
-        { name: "Divya", g: "f", gu: "દિવ્યા" }
-      ]}
-    ]},
-    { name: "Bhuliben", g: "f", gu: "ભુલીબેન", place: "Vedchha", placeGu: "વેડછા", children: [
-      { name: "Sukhiben", g: "f", children: [
-        { name: "Bhanu", g: "f", gu: "ભાનું", children: [
-          { name: "Jyoti", g: "f", gu: "જ્યોતિ" },
-          { name: "Ila", g: "f", gu: "ઈલા" }
-        ]},
-        { name: "Hansa", g: "f", gu: "હંસા" },
-        { name: "Veeru", g: "f", children: [
-          { name: "Hemantbhai", g: "m", gu: "હેમંત", spouse: "Jagrutiben", children: [
-            { name: "Darshna", g: "f", spouse: "Krutikbhai" }
+{ name: "Govindji", g: "m", gu: "ગોવિંદજી (જીવન)", children: [
+          { name: "Nagarji", g: "m", gu: "નાગર", children: [
+            { name: "Dullabhbhai", g: "m", children: [
+              { name: "Ranchhodji", g: "m", gu: "રણછોડજી", children: [
+                { name: "Pushpaben", g: "f", spouse: "Thakorbhai", children: [
+                  { name: "Hemlataben", g: "f" },
+                  { name: "Surbhiben", g: "f" },
+                  { name: "Ritaben", g: "f" },
+                  { name: "Sirishbhai", g: "m" }
+                ]},
+                { name: "Rameshbhai", g: "m", gu: "રમેશભાઈ", spouse: "Ushaben", children: [
+                  { name: "Jagruti", g: "f", spouse: "Snehalbhai", children: [
+                    { name: "Pari", g: "f", spouse: "Priyank" },
+                    { name: "Aneri", g: "f" }
+                  ]},
+                  { name: "Purvita", g: "f", spouse: "Darshanbhai", children: [
+                    { name: "Dharani", g: "f" }
+                  ]},
+                  { name: "Kartik", g: "m", gu: "કાર્તિક", spouse: "Namrata", children: [
+                    { name: "Aarchi", g: "f", spouse: "Vivek" },
+                    { name: "Aaryan", g: "m", gu: "આર્યન" }
+                  ]}
+                ]},
+                { name: "Kusumben", g: "f", spouse: "Hasmukhrai", noChildren: true }
+              ]}
+            ]},
+            { name: "Bhimbhai", g: "m", gu: "ભીમભાઈ", children: [
+              { name: "Maganbhai", g: "m", gu: "મગનભાઈ", children: [
+                { name: "Ranjeet", g: "m", children: [
+                  { name: "Niraj", g: "m", gu: "નિરજ", children: [
+                    { name: "Durva", g: "f", gu: "દુર્વા" }
+                  ]}
+                ]}
+              ]},
+              { name: "Kamuben", g: "f", gu: "કમૂબેન" },
+              { name: "Chhotubhai", g: "m", gu: "છોટુભાઈ", children: [
+                { name: "Sureshbhai", g: "m", gu: "સુરેશભાઈ", children: [
+                  { name: "Ankur", g: "m", children: [ { name: "Isha", g: "f" } ]},
+                  { name: "Jaymal", g: "m", children: [ { name: "Hiyan", g: "m" } ]}
+                ]},
+                { name: "Geetaben", g: "f", gu: "ગીતાબેન", children: [ { name: "Apurva", g: "m" } ]},
+                { name: "Bharatbhai", g: "m", gu: "ભરતભાઈ", children: [ { name: "Chirag", g: "m", children: [
+          { name: "Mahi", g: "f", gu: "માહી" },
+          { name: "Navya", g: "f", gu: "નાવ્યા" }
+        ]} ]},
+                { name: "Minakshiben", g: "f", gu: "મીનાક્ષી", unknown: true },
+                { name: "Ashokbhai", g: "m", gu: "અશોકભાઈ", children: [
+                  { name: "Smit", g: "m", children: [
+            { name: "Dhrish", g: "m", gu: "ધ્રીશ" },
+            { name: "Dhrit", g: "m", gu: "ધ્રીત" }
           ]},
-          { name: "Kokilaben", g: "f", gu: "કોકિલા", spouse: "Dilipbhai", children: [
-            { name: "Malvikaben", g: "f", spouse: "Himanshubhai" },
-            { name: "Darshanbhai", g: "m" }
-          ]},
-          { name: "Bharatbhai", g: "m", gu: "ભરત", spouse: "Divyaniben", children: [
-            { name: "Shivani", g: "f", spouse: "Ravi" }
+                  { name: "Richi", g: "m" }
+                ]}
+              ]}
+            ]},
+            { name: "Bhagwanji", g: "m", gu: "ભગવાનજી", spouse: "Sharadaben", children: [
+              { name: "Mahendrabhai", g: "m", gu: "મહેન્દ્ર", unknown: true },
+              { name: "Anilbhai", g: "m", gu: "અનિલ", spouse: "Kumudben", children: [
+                { name: "Keyur", g: "m", gu: "કેયૂર", spouse: "Purvi", children: [ { name: "Lay", g: "m", gu: "લય" } ]},
+                { name: "Uday", g: "m", gu: "ઉદય", spouse: "Mitalben", children: [
+                  { name: "Jahan", g: "m" },
+                  { name: "Hard", g: "m" }
+                ]},
+                { name: "Nipa", g: "f", spouse: "Nileshbhai", children: [ { name: "Aatmi", g: "f", gu: "આત્મી" } ]}
+              ]},
+              { name: "Harshaben", g: "f", spouse: "Manharbhai", children: [
+                { name: "Paresh", g: "m", spouse: "Manisha", children: [ { name: "Shrey", g: "m" } ]},
+                { name: "Nayan", g: "m", spouse: "Roshni", children: [ { name: "Jal", g: "m", spouse: "Tulsi" } ]}
+              ]},
+              { name: "Vinodbhai", g: "m", spouse: "Shilaben", children: [
+                { name: "Tejas", g: "m", spouse: "Sapna", children: [
+                  { name: "Dweep", g: "m" },
+                  { name: "Ved", g: "m" }
+                ]},
+                { name: "Neha", g: "f", children: [ { name: "Purv", g: "m" } ]}
+              ]},
+              { name: "Vasuben", g: "f", spouse: "Harshadbhai", children: [
+                { name: "Jigna", g: "f", spouse: "Keyur", children: [
+                  { name: "Sawni", g: "f" },
+                  { name: "Jash", g: "m" }
+                ]},
+                { name: "Ketal", g: "f", spouse: "Rakesh", children: [
+                  { name: "Krina", g: "f" },
+                  { name: "Dhrumit", g: "m" }
+                ]},
+                { name: "Shital", g: "f", spouse: "Pratik", children: [ { name: "Ish", g: "m" } ]}
+              ]}
+            ]},
+            { name: "Dayalji", g: "m", unknown: true },
+            { name: "Manchhaben", g: "f", gu: "મંછાબેન", place: "Amalsad", children: [
+              { name: "Bhimbhai", g: "m", gu: "ભીમભાઈ", children: [
+                { name: "Babu", g: "m", gu: "બાબુ" },
+                { name: "Suman", g: "m", gu: "સુમન" },
+                { name: "Ravindra", g: "m", gu: "રવિન્દ્ર" },
+                { name: "Jayesh", g: "m", gu: "જયેશ" },
+                { name: "Niru", g: "f", gu: "નીરુ" },
+                { name: "Manju", g: "f", gu: "મંજુ" }
+              ]},
+              { name: "Maganbhai", g: "m", gu: "મગનભાઈ", children: [
+                { name: "Somabhai", g: "m", gu: "સોમાભાઈ" },
+                { name: "Jatin", g: "m" },
+                { name: "Pushpa", g: "f", gu: "પુષ્પા" },
+                { name: "Panna", g: "f", gu: "પન્ના" },
+                { name: "Kumud", g: "f", gu: "કુમુદ" }
+              ]},
+              { name: "Bhagubhai", g: "m" },
+              { name: "Chhotubhai", g: "m", gu: "છોટુભાઈ" },
+              { name: "Dhirubhai", g: "m", gu: "ધીરુભાઈ" },
+              { name: "Ramanbhai", g: "m", gu: "રમણભાઈ", children: [
+                { name: "Bhavinbhai", g: "m" },
+                { name: "Bhago", g: "m", gu: "ભાગો" },
+                { name: "Divya", g: "f", gu: "દિવ્યા" }
+              ]}
+            ]},
+            { name: "Bhuliben", g: "f", gu: "ભુલીબેન", place: "Vedchha", placeGu: "વેડછા", children: [
+              { name: "Sukhiben", g: "f", children: [
+                { name: "Bhanu", g: "f", gu: "ભાનું", children: [
+                  { name: "Jyoti", g: "f", gu: "જ્યોતિ" },
+                  { name: "Ila", g: "f", gu: "ઈલા" }
+                ]},
+                { name: "Hansa", g: "f", gu: "હંસા" },
+                { name: "Veeru", g: "f", children: [
+                  { name: "Hemantbhai", g: "m", gu: "હેમંત", spouse: "Jagrutiben", children: [
+                    { name: "Darshna", g: "f", spouse: "Krutikbhai" }
+                  ]},
+                  { name: "Kokilaben", g: "f", gu: "કોકિલા", spouse: "Dilipbhai", children: [
+                    { name: "Malvikaben", g: "f", spouse: "Himanshubhai" },
+                    { name: "Darshanbhai", g: "m" }
+                  ]},
+                  { name: "Bharatbhai", g: "m", gu: "ભરત", spouse: "Divyaniben", children: [
+                    { name: "Shivani", g: "f", spouse: "Ravi" }
+                  ]}
+                ]}
+              ]}
+            ]},
+            { name: "Kashiben", g: "f", gu: "કાશીબેન", place: "Sonawadi", placeGu: "સોનાવાડી" },
+            { name: "Gangaben", g: "f", gu: "ગંગાબેન", place: "Sarbhan", placeGu: "સરભણ" }
           ]}
         ]}
       ]}
-    ]},
-    { name: "Kashiben", g: "f", gu: "કાશીબેન", place: "Sonawadi", placeGu: "સોનાવાડી" },
-    { name: "Gangaben", g: "f", gu: "ગંગાબેન", place: "Sarbhan", placeGu: "સરભણ" }
+    ]}
   ]}
 ]};
 
@@ -770,6 +908,7 @@ function metaText(p){
 }
 
 $("#stat-gens").textContent = byGen.length;
+$("#gen-words").textContent = ["One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen"][byGen.length - 1] || byGen.length;
 $("#stat-people").textContent = people.size;
 $("#stat-sons").textContent = [...people.values()].filter(p => p.parent && p.g === "m").length;
 $("#stat-daughters").textContent = [...people.values()].filter(p => p.parent && p.g === "f").length;
@@ -969,7 +1108,7 @@ if (HAS_GSAP){
    GLANCE — the whole tree, drawn generation by generation as you scroll
    ===================================================================== */
 (function glance(){
-  /* Top-down tree: Govindji at the top, one row per generation.
+  /* Top-down tree: Ram at the top, one row per generation.
      Brothers and sisters with no children of their own are stacked in a short
      list under their parent, which keeps the tree narrow enough to read. */
   const svg = $("#glance-svg"), box = $(".glance-scroll"), NS = "http://www.w3.org/2000/svg";
@@ -1311,7 +1450,7 @@ function show(id, { originEl = null, userInitiated = false } = {}){
   renderStage(p);
   const paths = drawBranches();
   announce.textContent = `Showing ${p.name}'s branch. ${metaText(p)}.`;
-  document.title = `${p.name} · Govindji's Vansh`;
+  document.title = `${p.name} · Naik Parivar`;
   if (userInitiated) $("#focus-name").focus({ preventScroll: true });
 
   if (!HAS_GSAP) return Promise.resolve();
